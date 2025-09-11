@@ -1,0 +1,570 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Prestadores | CONDOMUS - Síndico</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(120deg, #3c2b1c, #6b512d, #8a6d41);
+      background-size: 200% 200%;
+      animation: bgMove 15s ease infinite;
+      color: #333;
+      transition: background 0.3s ease;
+    }
+    @keyframes bgMove {
+      0% { background-position: 0% 50%; }
+      50% { background-position: 100% 50%; }
+      100% { background-position: 0% 50%; }
+    }
+    .sidebar {
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 240px;
+      background-color: #181818;
+      padding: 20px 0;
+      color: white;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+    }
+    .sidebar img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      box-shadow: 0 0 15px rgba(212, 163, 67, 0.5);
+    }
+    .sidebar h4 {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #d4a343;
+      margin-bottom: 10px;
+    }
+    .sidebar .painel-sindico {
+      font-size: 1.07rem;
+      font-weight: 600;
+      background: rgba(212, 163, 67, 0.09);
+      color: #d4a343;
+      border-radius: 8px;
+      padding: 4px 0;
+      margin: 0 15px 14px 15px;
+      letter-spacing: 0.03em;
+    }
+    .sidebar hr {
+      border-color: #444;
+      margin: 10px 15px;
+    }
+    .sidebar a {
+      color: #d4a343;
+      padding: 12px 25px;
+      display: block;
+      text-decoration: none;
+      text-align: left;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+    .sidebar a.active {
+      background-color: rgba(212, 163, 67, 0.2);
+      border-left: 4px solid #d4a343;
+      padding-left: 21px;
+      color: #fff;
+    }
+    .sidebar a:hover {
+      background-color: rgba(212, 163, 67, 0.1);
+      color: #f0c96b;
+    }
+    .sidebar a i {
+      margin-right: 10px;
+    }
+    .content {
+      margin-left: 240px;
+      padding: 2rem;
+    }
+    .gold-line {
+      width: 100px;
+      height: 3px;
+      background-color: #d4a343;
+      border-radius: 2px;
+      margin-top: -8px;
+      margin-bottom: 25px;
+    }
+    .btn-novo {
+      background-color: #d4a343;
+      color: #181818;
+      font-weight: 600;
+      border-radius: 7px;
+      padding: 7px 18px;
+      transition: 0.2s;
+      margin-bottom: 22px;
+    }
+    .btn-novo:hover {
+      background-color: #b7902f;
+      color: #fff;
+    }
+    .dark-mode {
+      background-color: #121212;
+      color: #f5f5f5;
+    }
+    .dark-mode .sidebar {
+      background-color: #232323;
+    }
+    .dark-mode .content {
+      background-color: #1f1f1f;
+      color: #f5f5f5;
+    }
+    .table-responsive {
+      border-radius: 12px;
+      overflow-x: auto;
+      box-shadow: 0 2px 10px rgba(44, 44, 44, 0.09);
+      margin-bottom: 2rem;
+      background: #fff;
+    }
+    .dark-mode .table-responsive {
+      background: #2a2a2a;
+    }
+    th, td {
+      vertical-align: middle !important;
+      white-space: nowrap;
+    }
+    .filter-group {
+      gap: 16px;
+      margin-bottom: 22px;
+      flex-wrap: wrap;
+    }
+    .status-ativo {
+      color: #198754;
+      font-weight: 600;
+    }
+    .status-aprovacao {
+      color: #ffc107;
+      font-weight: 600;
+    }
+    .status-bloqueado {
+      color: #dc3545;
+      font-weight: 600;
+    }
+    .status-pendente_bloqueio {
+      color: #fd7e14;
+      font-weight: 600;
+      font-style: italic;
+    }
+    .modal-content {
+      background-color: #fff !important;
+      color: #222 !important;
+    }
+    .dark-mode .modal-content {
+      background-color: #222 !important;
+      color: #fff !important;
+    }
+    .modal-body p, .modal-body span, .modal-body strong {
+      color: #222 !important;
+      font-size: 1.09rem;
+    }
+    .dark-mode .modal-body p,
+    .dark-mode .modal-body span,
+    .dark-mode .modal-body strong {
+      color: #fff !important;
+    }
+    .modal-body p strong {
+      font-weight: 600;
+      color: #d4a343 !important;
+    }
+    .modal-success {
+      color: #198754;
+      text-align: center;
+      font-size: 1.1rem;
+      font-weight: 600;
+      margin-top: 16px;
+    }
+    .modal-erro {
+      color: #dc3545;
+      font-size: 1.02rem;
+      margin-top: 6px;
+      display: none;
+    }
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+      .content {
+        margin-left: 0;
+        padding: 1rem;
+      }
+      .filter-group { flex-direction: column; gap: 6px; }
+      .table-responsive { font-size: .95rem; }
+    }
+  </style>
+</head>
+<body>
+  <!-- Botão modo escuro -->
+  <button class="dark-toggle-btn" onclick="toggleDarkMode()" title="Alternar tema" style="position: fixed; top: 15px; right: 15px; background: transparent; border: none; color: white; font-size: 1.5rem; z-index: 999;">
+    <i class="bi bi-moon-stars-fill"></i>
+  </button>
+
+  <!-- Sidebar -->
+  <nav class="sidebar">
+    <img src="img/logo.png" alt="Logo CONDOMUS">
+    <h4><i class="bi bi-house-door-fill me-1"></i>CONDOMUS</h4>
+
+    <hr>
+    <a href="dashboard_morador.html"><i class="bi bi-grid-fill me-2"></i> Início</a>
+    <a href="prestadores.html"><i class="bi bi-person-lines-fill me-2"></i> Prestadores</a>
+    <a href="minhas_solicitacoes.html"><i class="bi bi-clipboard-check me-2"></i> Minhas solicitações</a>
+    <a href="minhas_avaliacoes.html"><i class="bi bi-star-fill me-2"></i> Minhas avaliações</a>
+    <a href="favoritos.html"><i class="bi bi-heart-fill me-2"></i> Meus favoritos</a>
+    <a href="ranking.html"><i class="bi bi-trophy me-2"></i> Ranking de prestadores</a>
+    <hr>
+    <a href="minha_conta.html"><i class="bi bi-person-circle me-2"></i> Minha conta</a>
+    <a href="index.html" style="margin-bottom: 0px; margin-top: 0px;">
+      <i class="bi bi-box-arrow-right me-2"></i> Sair
+    </a>
+  </nav>
+
+  <div class="content">
+    <h2 class="fw-bold mb-1" style="color: #d4a343;">
+      Prestadores de Serviço
+    </h2>
+    <div class="gold-line"></div>
+    <button class="btn btn-novo mb-3" onclick="abrirModalIndicar()"><i class="bi bi-send-plus me-1"></i>Indicar novo prestador</button>
+
+    <!-- Filtros -->
+    <div class="d-flex filter-group align-items-center mb-3">
+      <div>
+        <label class="form-label mb-0 me-2">Área de atuação:</label>
+        <select class="form-select form-select-sm d-inline-block" id="filtroArea" style="width:180px;">
+          <option value="todos">Todas</option>
+          <option>Elétrica</option>
+          <option>Jardinagem</option>
+          <option>Vidros e Espelhos</option>
+          <option>Pintura</option>
+          <option>Informática</option>
+          <option>Outros</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label mb-0 me-2">Status:</label>
+        <select class="form-select form-select-sm d-inline-block" id="filtroStatus" style="width:150px;">
+          <option value="todos">Todos</option>
+          <option value="ativo">Ativo</option>
+          <option value="aprovacao">Aguardando aprovação</option>
+          <option value="pendente_bloqueio">Aguardando bloqueio</option>
+          <option value="bloqueado">Bloqueado</option>
+        </select>
+      </div>
+      <div>
+        <label class="form-label mb-0 me-2">Nome:</label>
+        <input type="text" id="filtroNome" class="form-control form-control-sm d-inline-block" placeholder="Pesquisar" style="width:150px;">
+      </div>
+    </div>
+
+    <!-- Tabela de Prestadores -->
+    <div class="table-responsive">
+      <table class="table table-bordered align-middle mb-0" id="tabelaPrestadores">
+        <thead class="table-light">
+          <tr>
+            <th>Nome</th>
+            <th>Área de atuação</th>
+            <th>Contato</th>
+            <th>Status</th>
+            <th class="text-center">Ações</th>
+          </tr>
+        </thead>
+        <tbody>
+          <!-- Prestadores serão inseridos por JS -->
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Modal Detalhes do Prestador -->
+  <div class="modal fade" id="modalDetalhesPrestador" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0">
+        <div class="modal-header bg-warning text-dark">
+          <h5 class="modal-title fw-bold"><i class="bi bi-person-badge me-2"></i>Detalhes do Prestador</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <p><strong>Nome:</strong> <span id="modalNome"></span></p>
+          <p><strong>Área de atuação:</strong> <span id="modalArea"></span></p>
+          <p><strong>Contato:</strong> <span id="modalContato"></span></p>
+          <p><strong>Status:</strong> <span id="modalStatus"></span></p>
+          <p><strong>Avaliação média:</strong> <span id="modalAvaliacao"></span></p>
+          <hr>
+          <p><strong>Descrição profissional:</strong><br><span id="modalDescricao"></span></p>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Indicar Prestador -->
+  <div class="modal fade" id="modalIndicar" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0">
+        <div class="modal-header bg-warning text-dark">
+          <h5 class="modal-title fw-bold"><i class="bi bi-send-plus me-2"></i>Indicar Novo Prestador</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formIndicar">
+            <div class="mb-2">
+              <label class="form-label">Nome do prestador*</label>
+              <input type="text" class="form-control" id="indicarNome" required>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Área de atuação*</label>
+              <select class="form-select" id="indicarArea" required>
+                <option value="">Selecione...</option>
+                <option>Elétrica</option>
+                <option>Jardinagem</option>
+                <option>Vidros e Espelhos</option>
+                <option>Pintura</option>
+                <option>Informática</option>
+                <option>Outros</option>
+              </select>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Contato (telefone ou WhatsApp)*</label>
+              <input type="text" class="form-control" id="indicarContato" required>
+            </div>
+            <div class="mb-2">
+              <label class="form-label">Descrição profissional</label>
+              <textarea class="form-control" id="indicarDescricao" rows="2"></textarea>
+            </div>
+            <button type="submit" class="btn btn-success w-100 mt-2">Enviar indicação</button>
+          </form>
+          <div id="indicarMsgSucesso" class="modal-success" style="display:none;">
+            <i class="bi bi-check-circle-fill me-1"></i>
+            Indicação enviada com sucesso! Em breve a equipe de gestão analisará os dados do prestador.
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal Bloquear Prestador -->
+  <div class="modal fade" id="modalBloquear" tabindex="-1">
+    <div class="modal-dialog modal-dialog-centered">
+      <div class="modal-content border-0">
+        <div class="modal-header bg-danger text-white">
+          <h5 class="modal-title fw-bold"><i class="bi bi-slash-circle me-2"></i>Bloquear Prestador</h5>
+          <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal"></button>
+        </div>
+        <div class="modal-body">
+          <form id="formBloquear">
+            <p>Informe uma justificativa para o bloqueio (mínimo 15 caracteres):</p>
+            <textarea class="form-control" id="bloquearJustificativa" rows="3" minlength="15" required></textarea>
+            <div id="bloquearErro" class="modal-erro"></div>
+            <input type="hidden" id="bloquearId">
+            <button type="submit" class="btn btn-danger w-100 mt-3">Solicitar bloqueio</button>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Scripts -->
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Mock de prestadores
+    const prestadores = [
+      {
+        id: 1,
+        nome: 'José Silva',
+        area: 'Elétrica',
+        contato: '(14) 99912-3456',
+        status: 'ativo',
+        avaliacao: 4.8,
+        descricao: 'Especialista em instalações, reparos elétricos e manutenção preventiva há 12 anos, com atuação em condomínios residenciais e comerciais.'
+      },
+      {
+        id: 2,
+        nome: 'Maria Espelhos',
+        area: 'Vidros e Espelhos',
+        contato: '(14) 98888-1245',
+        status: 'aprovacao',
+        avaliacao: 4.6,
+        descricao: 'Experiência de 8 anos com instalação de box, espelhos decorativos, janelas e vidros temperados.'
+      },
+      {
+        id: 3,
+        nome: 'Flor & Verde Paisagismo',
+        area: 'Jardinagem',
+        contato: '(14) 99777-3000',
+        status: 'ativo',
+        avaliacao: 4.9,
+        descricao: 'Empresa especializada em manutenção de jardins, poda de árvores e projetos paisagísticos para áreas comuns de condomínios.'
+      },
+      {
+        id: 4,
+        nome: 'Lucas Tintas',
+        area: 'Pintura',
+        contato: '(14) 98823-0011',
+        status: 'bloqueado',
+        avaliacao: 4.2,
+        descricao: 'Trabalhos de pintura interna e externa, impermeabilização e restauração de fachadas. Atende residências e áreas comuns.'
+      },
+      {
+        id: 5,
+        nome: 'TechHelp Informática',
+        area: 'Informática',
+        contato: '(14) 99111-4411',
+        status: 'ativo',
+        avaliacao: 5.0,
+        descricao: 'Suporte e manutenção de redes, configuração de wi-fi, computadores e impressoras em unidades residenciais.'
+      }
+    ];
+
+    function renderPrestadores() {
+      const filtroArea = document.getElementById('filtroArea').value;
+      const filtroStatus = document.getElementById('filtroStatus').value;
+      const filtroNome = document.getElementById('filtroNome').value.trim().toLowerCase();
+
+      const tbody = document.querySelector('#tabelaPrestadores tbody');
+      tbody.innerHTML = '';
+
+      prestadores.forEach((p) => {
+        if (
+          (filtroArea === 'todos' || p.area === filtroArea) &&
+          (filtroStatus === 'todos' || p.status === filtroStatus) &&
+          (filtroNome === '' || p.nome.toLowerCase().includes(filtroNome))
+        ) {
+          tbody.innerHTML += `
+            <tr>
+              <td>${p.nome}</td>
+              <td>${p.area}</td>
+              <td>
+                <a href="https://wa.me/55${p.contato.replace(/\D/g, '')}" target="_blank" class="text-success text-decoration-none">
+                  <i class="bi bi-whatsapp"></i> ${p.contato}
+                </a>
+              </td>
+              <td class="status-${p.status}">${formatarStatus(p.status)}</td>
+              <td class="text-center">
+                <button class="btn btn-outline-primary btn-sm" onclick="abrirModal(${p.id})"><i class="bi bi-eye"></i> Detalhes</button>
+                <button class="btn btn-outline-success btn-sm" ${p.status === 'aprovacao' ? '' : 'disabled'} onclick="aprovarPrestador(${p.id})"><i class="bi bi-check-circle"></i> Aprovar</button>
+                <button class="btn btn-outline-danger btn-sm" ${p.status === 'ativo' ? '' : 'disabled'} onclick="abrirModalBloquear(${p.id})"><i class="bi bi-slash-circle"></i> Bloquear</button>
+                <button class="btn btn-outline-warning btn-sm" ${p.status === 'bloqueado' ? '' : 'disabled'} onclick="desbloquearPrestador(${p.id})"><i class="bi bi-unlock"></i> Desbloquear</button>
+              </td>
+            </tr>
+          `;
+        }
+      });
+    }
+
+    function formatarStatus(status) {
+      if (status === 'ativo') return 'Ativo';
+      if (status === 'aprovacao') return 'Aguardando aprovação';
+      if (status === 'bloqueado') return 'Bloqueado';
+      if (status === 'pendente_bloqueio') return 'Aguardando aprovação de bloqueio';
+      return status;
+    }
+
+    // Modal de detalhes
+    function abrirModal(id) {
+      const p = prestadores.find(x => x.id === id);
+      if (!p) return;
+      document.getElementById('modalNome').innerText = p.nome;
+      document.getElementById('modalArea').innerText = p.area;
+      document.getElementById('modalContato').innerText = p.contato;
+      document.getElementById('modalStatus').innerText = formatarStatus(p.status);
+      document.getElementById('modalAvaliacao').innerText = p.avaliacao.toFixed(2) + ' ⭐';
+      document.getElementById('modalDescricao').innerText = p.descricao;
+
+      new bootstrap.Modal(document.getElementById('modalDetalhesPrestador')).show();
+    }
+
+    // Modal Indicar
+    function abrirModalIndicar() {
+      document.getElementById('formIndicar').reset();
+      document.getElementById('indicarMsgSucesso').style.display = 'none';
+      new bootstrap.Modal(document.getElementById('modalIndicar')).show();
+    }
+
+    // Modal Bloquear Prestador
+    function abrirModalBloquear(id) {
+      document.getElementById('formBloquear').reset();
+      document.getElementById('bloquearJustificativa').value = '';
+      document.getElementById('bloquearErro').style.display = 'none';
+      document.getElementById('bloquearId').value = id;
+      new bootstrap.Modal(document.getElementById('modalBloquear')).show();
+    }
+
+    document.addEventListener('DOMContentLoaded', function() {
+      renderPrestadores();
+      document.getElementById('filtroArea').addEventListener('change', renderPrestadores);
+      document.getElementById('filtroStatus').addEventListener('change', renderPrestadores);
+      document.getElementById('filtroNome').addEventListener('input', renderPrestadores);
+
+      document.getElementById('formIndicar').addEventListener('submit', function(e) {
+        e.preventDefault();
+        document.getElementById('indicarMsgSucesso').style.display = 'block';
+        setTimeout(() => {
+          bootstrap.Modal.getInstance(document.getElementById('modalIndicar')).hide();
+        }, 2000);
+      });
+
+      // Justificativa bloqueio
+      document.getElementById('formBloquear').addEventListener('submit', function(e) {
+        e.preventDefault();
+        const justificativa = document.getElementById('bloquearJustificativa').value.trim();
+        const id = parseInt(document.getElementById('bloquearId').value);
+        const erro = document.getElementById('bloquearErro');
+        if (justificativa.length < 15) {
+          erro.innerText = 'A justificativa deve ter pelo menos 15 caracteres.';
+          erro.style.display = 'block';
+          return;
+        }
+        erro.style.display = 'none';
+        // Marca como pendente de bloqueio para aprovação do admin
+        pendenteBloqueioPrestador(id, justificativa);
+        bootstrap.Modal.getInstance(document.getElementById('modalBloquear')).hide();
+      });
+
+      // Modo escuro persistente
+      if (localStorage.getItem("modoEscuro") === "true") {
+        document.body.classList.add("dark-mode");
+      }
+    });
+
+    // Ações
+    function aprovarPrestador(id) {
+      const p = prestadores.find(x => x.id === id);
+      if (p && p.status === 'aprovacao') {
+        p.status = 'ativo';
+        renderPrestadores();
+      }
+    }
+    function pendenteBloqueioPrestador(id, justificativa) {
+      const p = prestadores.find(x => x.id === id);
+      if (p && p.status === 'ativo') {
+        p.status = 'pendente_bloqueio';
+        // Aqui você pode salvar a justificativa para aprovação futura!
+        renderPrestadores();
+      }
+    }
+    function desbloquearPrestador(id) {
+      const p = prestadores.find(x => x.id === id);
+      if (p && p.status === 'bloqueado') {
+        p.status = 'ativo';
+        renderPrestadores();
+      }
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      localStorage.setItem("modoEscuro", document.body.classList.contains("dark-mode"));
+    }
+  </script>
+</body>
+</html>

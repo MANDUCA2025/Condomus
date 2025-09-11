@@ -1,0 +1,799 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Ranking de Prestadores | CONDOMUS</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    :root {
+      --gold: #d4a343;
+      --gold-light: #f0c96b;
+      --gold-dark: #c49b2e;
+      --silver: #c0c0c0;
+      --bronze: #cd7f32;
+      --dark-bg: #121212;
+      --light-bg: #ffffff;
+      --text-dark: #333333;
+      --text-light: #f5f5f5;
+      --transition: all 0.3s ease;
+    }
+
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #3c2b1c, #6b512d);
+      color: var(--text-dark);
+      transition: background 0.5s ease, color 0.3s ease;
+    }
+
+    /* Sidebar (mantido exatamente como estava) */
+    .sidebar {
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 240px;
+      background-color: #121212;
+      padding: 20px 0;
+      color: white;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+    }
+
+    .sidebar img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      box-shadow: 0 0 15px rgba(212, 163, 67, 0.5);
+    }
+
+    .sidebar h4 {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #d4a343;
+      margin-bottom: 20px;
+    }
+
+    .sidebar hr {
+      border-color: #444;
+      margin: 10px 15px;
+    }
+
+    .sidebar a {
+      color: #d4a343;
+      padding: 12px 25px;
+      display: block;
+      text-decoration: none;
+      text-align: left;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .sidebar a:hover {
+      background-color: rgba(212, 163, 67, 0.1);
+      color: #f0c96b;
+    }
+
+    .sidebar a.active {
+      background-color: rgba(212, 163, 67, 0.2);
+      border-left: 4px solid #d4a343;
+      padding-left: 21px;
+      color: #fff;
+    }
+
+    .content {
+      margin-left: 240px;
+      padding: 2rem;
+    }
+
+    /* Dark Mode */
+    .dark-mode {
+      background: linear-gradient(to right, #1a120b, #2c2416);
+      color: var(--text-light);
+    }
+
+    .dark-mode .content {
+      background-color: #1f1f1f;
+    }
+
+    /* Header */
+    .page-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 2rem;
+    }
+
+    .page-title {
+      color: var(--gold);
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+    }
+
+    .page-title i {
+      margin-right: 0.75rem;
+    }
+
+    /* Categorias */
+    .category-tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 2rem;
+      flex-wrap: wrap;
+    }
+
+    .category-tab {
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      background-color: rgba(255, 255, 255, 0.1);
+      color: var(--text-dark);
+      cursor: pointer;
+      transition: var(--transition);
+      font-weight: 500;
+      border: none;
+    }
+
+    .category-tab.active {
+      background-color: var(--gold);
+      color: #000;
+    }
+
+    .dark-mode .category-tab {
+      background-color: rgba(255, 255, 255, 0.05);
+      color: var(--text-light);
+    }
+
+    .dark-mode .category-tab.active {
+      background-color: var(--gold);
+      color: #000;
+    }
+
+    /* Ranking */
+    .ranking-container {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    }
+
+    .dark-mode .ranking-container {
+      background: rgba(42, 42, 42, 0.9);
+      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
+    }
+
+    .ranking-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 1.5rem;
+      padding-bottom: 1rem;
+      border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    }
+
+    .dark-mode .ranking-header {
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .ranking-title {
+      font-weight: 600;
+      color: var(--gold);
+    }
+
+    /* Itens do Ranking */
+    .ranking-item {
+      display: flex;
+      align-items: center;
+      padding: 1rem;
+      margin-bottom: 1rem;
+      border-radius: 8px;
+      background-color: rgba(255, 255, 255, 0.7);
+      transition: var(--transition);
+    }
+
+    .dark-mode .ranking-item {
+      background-color: rgba(50, 50, 50, 0.7);
+    }
+
+    .ranking-item:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    }
+
+    .ranking-position {
+      width: 40px;
+      height: 40px;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-weight: 600;
+      margin-right: 1.5rem;
+      flex-shrink: 0;
+    }
+
+    .position-1 {
+      background-color: var(--gold);
+      color: #000;
+    }
+
+    .position-2 {
+      background-color: var(--silver);
+      color: #000;
+    }
+
+    .position-3 {
+      background-color: var(--bronze);
+      color: #000;
+    }
+
+    .position-other {
+      background-color: #f0f0f0;
+      color: #555;
+    }
+
+    .dark-mode .position-other {
+      background-color: #444;
+      color: #ddd;
+    }
+
+    .ranking-avatar {
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      object-fit: cover;
+      margin-right: 1.5rem;
+      border: 3px solid var(--gold);
+    }
+
+    .ranking-details {
+      flex: 1;
+    }
+
+    .ranking-name {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .ranking-category {
+      color: var(--gold);
+      font-size: 0.9rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .ranking-stats {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .stat-item {
+      display: flex;
+      align-items: center;
+    }
+
+    .stat-item i {
+      margin-right: 0.5rem;
+      color: var(--gold);
+    }
+
+    .ranking-badges {
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .badge-premium {
+      background-color: var(--gold);
+      color: #000;
+      font-weight: 500;
+      padding: 0.25rem 0.75rem;
+      border-radius: 50rem;
+      font-size: 0.8rem;
+    }
+
+    .badge-online {
+      background-color: #28a745;
+      color: white;
+      padding: 0.25rem 0.75rem;
+      border-radius: 50rem;
+      font-size: 0.8rem;
+    }
+
+    /* Selos de Medalha */
+    .medal-badge {
+      width: 40px;
+      height: 40px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-radius: 50%;
+      margin-left: 1rem;
+    }
+
+    .medal-gold {
+      background-color: var(--gold);
+      box-shadow: 0 0 10px rgba(212, 163, 67, 0.5);
+    }
+
+    .medal-silver {
+      background-color: var(--silver);
+      box-shadow: 0 0 10px rgba(192, 192, 192, 0.5);
+    }
+
+    .medal-bronze {
+      background-color: var(--bronze);
+      box-shadow: 0 0 10px rgba(205, 127, 50, 0.5);
+    }
+
+    /* Benefícios */
+    .benefits-container {
+      margin-top: 3rem;
+    }
+
+    .benefits-title {
+      color: var(--gold);
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      text-align: center;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .benefit-card {
+      background: rgba(255, 255, 255, 0.9);
+      border-radius: 12px;
+      padding: 1.5rem;
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+      transition: var(--transition);
+    }
+
+    .dark-mode .benefit-card {
+      background: rgba(42, 42, 42, 0.9);
+      box-shadow: 0 4px 8px rgba(0, 0, 0, 0.3);
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-5px);
+      box-shadow: 0 8px 16px rgba(0, 0, 0, 0.15);
+    }
+
+    .benefit-header {
+      display: flex;
+      align-items: center;
+      margin-bottom: 1rem;
+    }
+
+    .benefit-icon {
+      width: 50px;
+      height: 50px;
+      border-radius: 50%;
+      background-color: var(--gold);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      margin-right: 1rem;
+      color: #000;
+      font-size: 1.5rem;
+    }
+
+    .benefit-title {
+      font-weight: 600;
+      margin-bottom: 0.25rem;
+    }
+
+    .benefit-position {
+      font-size: 0.9rem;
+      color: var(--gold);
+    }
+
+    /* Botão Dark Mode */
+    .dark-toggle-btn {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 1000;
+      transition: transform 0.3s ease;
+    }
+
+    .dark-toggle-btn:hover {
+      transform: scale(1.1);
+    }
+
+    .dark-mode .dark-toggle-btn {
+      color: var(--gold);
+    }
+  </style>
+</head>
+<body>
+  <button class="dark-toggle-btn" onclick="toggleDarkMode()" title="Modo escuro" aria-label="Alternar modo escuro">
+    <i class="bi bi-moon-stars-fill"></i>
+  </button>
+
+  <!-- Sidebar (mantido exatamente como estava) -->
+  <nav class="sidebar">
+    <img src="img/logo.png" alt="Logo CONDOMUS">
+    <h4><i class="bi bi-house-door-fill me-1"></i>CONDOMUS</h4>
+
+    <hr>
+    <a href="dashboard_morador.html"><i class="bi bi-grid-fill me-2"></i> Início</a>
+    <a href="prestadores.html"><i class="bi bi-person-lines-fill me-2"></i> Prestadores</a>
+    <a href="minhas_solicitacoes.html"><i class="bi bi-clipboard-check me-2"></i> Minhas solicitações</a>
+    <a href="minhas_avaliacoes.html"><i class="bi bi-star-fill me-2"></i> Minhas avaliações</a>
+    <a href="favoritos.html"><i class="bi bi-heart-fill me-2"></i> Meus favoritos</a>
+    <a href="ranking.html"><i class="bi bi-trophy me-2"></i> Ranking de prestadores</a>
+    <hr>
+    <a href="minha_conta.html"><i class="bi bi-person-circle me-2"></i> Minha conta</a>
+    <a href="index.html" style="margin-bottom: 0px; margin-top: 0px;">
+      <i class="bi bi-box-arrow-right me-2"></i> Sair
+    </a>
+  </nav>
+
+  <div class="content">
+    <div class="page-header">
+      <h1 class="page-title"><i class="bi bi-trophy-fill"></i> Ranking de Prestadores</h1>
+      <div class="text-muted">Atualizado em: <span id="dataAtualizacao">10/07/2025</span></div>
+    </div>
+
+    <!-- Categorias -->
+    <div class="category-tabs" id="categoryTabs">
+      <button class="category-tab active" data-category="all">Todos</button>
+      <button class="category-tab" data-category="eletrica">Elétrica</button>
+      <button class="category-tab" data-category="hidraulica">Hidráulica</button>
+      <button class="category-tab" data-category="pintura">Pintura</button>
+      <button class="category-tab" data-category="marcenaria">Marcenaria</button>
+      <button class="category-tab" data-category="vidros">Vidros/Espelhos</button>
+      <button class="category-tab" data-category="jardinagem">Jardinagem</button>
+    </div>
+
+    <!-- Ranking Geral -->
+    <div class="ranking-container">
+      <div class="ranking-header">
+        <h3 class="ranking-title"><i class="bi bi-trophy-fill"></i> Top Prestadores</h3>
+        <div class="text-muted">Baseado em avaliações dos moradores</div>
+      </div>
+
+      <div id="rankingList">
+        <!-- Ranking será carregado dinamicamente aqui -->
+      </div>
+    </div>
+
+    <!-- Benefícios para os Top Prestadores -->
+    <div class="benefits-container">
+      <h3 class="benefits-title"><i class="bi bi-award-fill"></i> Benefícios Exclusivos para os Top Prestadores</h3>
+      
+      <div class="benefits-grid">
+        <div class="benefit-card">
+          <div class="benefit-header">
+            <div class="benefit-icon medal-gold">
+              <i class="bi bi-trophy-fill"></i>
+            </div>
+            <div>
+              <h4 class="benefit-title">1º Lugar (Ouro)</h4>
+              <div class="benefit-position">Top de categoria</div>
+            </div>
+          </div>
+          <ul>
+            <li>Destaque especial no aplicativo</li>
+            <li>Selos de qualidade em seu perfil</li>
+            <li>Taxa de serviço reduzida (5%)</li>
+            <li>Prioridade nas indicações</li>
+            <li>Divulgação em nossa newsletter</li>
+          </ul>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-header">
+            <div class="benefit-icon medal-silver">
+              <i class="bi bi-trophy-fill"></i>
+            </div>
+            <div>
+              <h4 class="benefit-title">2º Lugar (Prata)</h4>
+              <div class="benefit-position">Excelência comprovada</div>
+            </div>
+          </div>
+          <ul>
+            <li>Destaque na categoria</li>
+            <li>Selos de qualidade em seu perfil</li>
+            <li>Taxa de serviço reduzida (3%)</li>
+            <li>Prioridade nas indicações</li>
+          </ul>
+        </div>
+
+        <div class="benefit-card">
+          <div class="benefit-header">
+            <div class="benefit-icon medal-bronze">
+              <i class="bi bi-trophy-fill"></i>
+            </div>
+            <div>
+              <h4 class="benefit-title">3º Lugar (Bronze)</h4>
+              <div class="benefit-position">Destaque na categoria</div>
+            </div>
+          </div>
+          <ul>
+            <li>Selos de qualidade em seu perfil</li>
+            <li>Taxa de serviço reduzida (2%)</li>
+            <li>Prioridade nas indicações</li>
+          </ul>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+  <script>
+    // Dados dos prestadores (simulando dados de API)
+    const prestadoresData = [
+      // Elétrica
+      {
+        id: 1,
+        nome: "Carlos Eletricista",
+        categoria: "eletrica",
+        nota: 9.7,
+        avaliacoes: 42,
+        foto: "https://randomuser.me/api/portraits/men/65.jpg",
+        online: true,
+        servicos: ["Instalações elétricas", "Manutenção predial", "Quadros de distribuição"],
+        contato: "(11) 99876-5432",
+        posicao: 1
+      },
+      {
+        id: 2,
+        nome: "Luiz Instalações",
+        categoria: "eletrica",
+        nota: 9.3,
+        avaliacoes: 28,
+        foto: "https://randomuser.me/api/portraits/men/22.jpg",
+        online: false,
+        servicos: ["Instalações residenciais", "Manutenção geral"],
+        contato: "(11) 98765-1234",
+        posicao: 2
+      },
+      // Hidráulica
+      {
+        id: 3,
+        nome: "Ana Hidráulica",
+        categoria: "hidraulica",
+        nota: 9.6,
+        avaliacoes: 35,
+        foto: "https://randomuser.me/api/portraits/women/68.jpg",
+        online: true,
+        servicos: ["Reparos hidráulicos", "Desentupimentos", "Instalações sanitárias"],
+        contato: "(11) 94567-8901",
+        posicao: 1
+      },
+      {
+        id: 4,
+        nome: "Paulo Encanador",
+        categoria: "hidraulica",
+        nota: 9.1,
+        avaliacoes: 19,
+        foto: "https://randomuser.me/api/portraits/men/45.jpg",
+        online: false,
+        servicos: ["Reparos em geral", "Instalações"],
+        contato: "(11) 91234-5678",
+        posicao: 2
+      },
+      // Pintura
+      {
+        id: 5,
+        nome: "Pedro Pintor",
+        categoria: "pintura",
+        nota: 9.4,
+        avaliacoes: 31,
+        foto: "https://randomuser.me/api/portraits/men/75.jpg",
+        online: true,
+        servicos: ["Pintura residencial", "Texturas", "Impermeabilização"],
+        contato: "(11) 97654-3210",
+        posicao: 1
+      },
+      // Marcenaria
+      {
+        id: 6,
+        nome: "João Marceneiro",
+        categoria: "marcenaria",
+        nota: 9.2,
+        avaliacoes: 27,
+        foto: "https://randomuser.me/api/portraits/men/32.jpg",
+        online: false,
+        servicos: ["Móveis sob medida", "Reparos em madeira", "Instalação de armários"],
+        contato: "(11) 91234-5678",
+        posicao: 1
+      },
+      // Vidros/Espelhos
+      {
+        id: 7,
+        nome: "Maria Vidraçaria",
+        categoria: "vidros",
+        nota: 9.8,
+        avaliacoes: 48,
+        foto: "https://randomuser.me/api/portraits/women/44.jpg",
+        online: true,
+        servicos: ["Instalação de espelhos", "Reparo de vidros", "Box para banheiro"],
+        contato: "(11) 98765-4321",
+        posicao: 1
+      },
+      // Jardinagem
+      {
+        id: 8,
+        nome: "Ricardo Jardineiro",
+        categoria: "jardinagem",
+        nota: 9.5,
+        avaliacoes: 23,
+        foto: "https://randomuser.me/api/portraits/men/55.jpg",
+        online: false,
+        servicos: ["Paisagismo", "Podas", "Manutenção de jardins"],
+        contato: "(11) 93456-7890",
+        posicao: 1
+      }
+    ];
+
+    // Elementos do DOM
+    const rankingList = document.getElementById('rankingList');
+    const categoryTabs = document.getElementById('categoryTabs');
+    const dataAtualizacao = document.getElementById('dataAtualizacao');
+
+    // Inicialização
+    document.addEventListener('DOMContentLoaded', () => {
+      // Verificar modo escuro
+      if (localStorage.getItem('modoEscuro') === 'true') {
+        document.body.classList.add('dark-mode');
+        document.querySelector('.dark-toggle-btn i').className = 'bi bi-sun-fill';
+      }
+      
+      // Atualizar data
+      const hoje = new Date();
+      dataAtualizacao.textContent = hoje.toLocaleDateString('pt-BR');
+      
+      // Carregar ranking geral inicial
+      carregarRanking('all');
+      
+      // Configurar tabs de categoria
+      const tabs = categoryTabs.querySelectorAll('.category-tab');
+      tabs.forEach(tab => {
+        tab.addEventListener('click', () => {
+          tabs.forEach(t => t.classList.remove('active'));
+          tab.classList.add('active');
+          carregarRanking(tab.dataset.category);
+        });
+      });
+    });
+
+    // Função para carregar o ranking
+    function carregarRanking(categoria) {
+      // Simular loading
+      rankingList.innerHTML = `
+        <div class="text-center py-4">
+          <div class="spinner-border text-warning" role="status">
+            <span class="visually-hidden">Carregando...</span>
+          </div>
+        </div>`;
+      
+      // Simular requisição assíncrona
+      setTimeout(() => {
+        // Filtrar por categoria
+        let prestadoresFiltrados = categoria === 'all' 
+          ? [...prestadoresData] 
+          : prestadoresData.filter(p => p.categoria === categoria);
+        
+        // Ordenar por nota (decrescente)
+        prestadoresFiltrados.sort((a, b) => b.nota - a.nota);
+        
+        // Exibir ranking
+        exibirRanking(prestadoresFiltrados);
+      }, 500);
+    }
+
+    // Função para exibir o ranking
+    function exibirRanking(prestadores) {
+      rankingList.innerHTML = '';
+      
+      if (prestadores.length === 0) {
+        rankingList.innerHTML = `
+          <div class="text-center py-4 text-muted">
+            Nenhum prestador encontrado nesta categoria
+          </div>`;
+        return;
+      }
+      
+      prestadores.forEach((prestador, index) => {
+        const posicao = index + 1;
+        const rankingItem = document.createElement('div');
+        rankingItem.className = 'ranking-item';
+        
+        // Determinar classe de posição
+        let positionClass = 'position-other';
+        let medalBadge = '';
+        
+        if (posicao === 1) {
+          positionClass = 'position-1';
+          medalBadge = '<div class="medal-badge medal-gold"><i class="bi bi-trophy-fill"></i></div>';
+        } else if (posicao === 2) {
+          positionClass = 'position-2';
+          medalBadge = '<div class="medal-badge medal-silver"><i class="bi bi-trophy-fill"></i></div>';
+        } else if (posicao === 3) {
+          positionClass = 'position-3';
+          medalBadge = '<div class="medal-badge medal-bronze"><i class="bi bi-trophy-fill"></i></div>';
+        }
+        
+        rankingItem.innerHTML = `
+          <div class="ranking-position ${positionClass}">${posicao}º</div>
+          <img src="${prestador.foto}" alt="${prestador.nome}" class="ranking-avatar">
+          <div class="ranking-details">
+            <h4 class="ranking-name">${prestador.nome}</h4>
+            <p class="ranking-category">
+              <i class="bi ${getCategoryIcon(prestador.categoria)}"></i> ${getCategoryName(prestador.categoria)}
+            </p>
+            <div class="ranking-stats">
+              <div class="stat-item">
+                <i class="bi bi-star-fill"></i>
+                <span>${prestador.nota.toFixed(1)} (${prestador.avaliacoes} avaliações)</span>
+              </div>
+              <div class="stat-item">
+                <i class="bi bi-telephone"></i>
+                <span>${prestador.contato}</span>
+              </div>
+            </div>
+            <div class="ranking-badges mt-2">
+              ${prestador.online ? '<span class="badge-online"><i class="bi bi-check-circle"></i> Online</span>' : ''}
+              ${posicao <= 3 ? '<span class="badge-premium"><i class="bi bi-award"></i> Top ' + posicao + '</span>' : ''}
+            </div>
+          </div>
+          ${medalBadge}`;
+        
+        rankingList.appendChild(rankingItem);
+      });
+    }
+
+    // Função para alternar o modo escuro
+    function toggleDarkMode() {
+      document.body.classList.toggle('dark-mode');
+      const isDark = document.body.classList.contains('dark-mode');
+      localStorage.setItem('modoEscuro', isDark);
+      
+      // Atualizar ícone
+      const icon = document.querySelector('.dark-toggle-btn i');
+      icon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
+    }
+
+    // Funções auxiliares
+    function getCategoryIcon(categoria) {
+      const icons = {
+        "eletrica": "bi-lightning-charge",
+        "hidraulica": "bi-droplet",
+        "pintura": "bi-brush",
+        "marcenaria": "bi-hammer",
+        "vidros": "bi-window",
+        "jardinagem": "bi-flower1"
+      };
+      return icons[categoria] || "bi-tools";
+    }
+
+    function getCategoryName(categoria) {
+      const names = {
+        "eletrica": "Elétrica",
+        "hidraulica": "Hidráulica",
+        "pintura": "Pintura",
+        "marcenaria": "Marcenaria",
+        "vidros": "Vidros/Espelhos",
+        "jardinagem": "Jardinagem"
+      };
+      return names[categoria] || "Outros";
+    }
+  </script>
+</body>
+</html>

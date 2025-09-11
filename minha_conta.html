@@ -1,0 +1,367 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Minha Conta | CONDOMUS</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #3c2b1c, #6b512d);
+      color: #333;
+      transition: background 0.3s ease;
+    }
+
+    .sidebar {
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  background-color: #121212;
+  padding: 20px 0;
+  color: white;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  z-index: 100;
+  transition: all 0.3s ease;
+}
+.sidebar img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+  box-shadow: 0 0 15px rgba(212,163,67,0.5);
+  transition: all 0.3s ease;
+}
+.sidebar h4 {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: #d4a343;
+  margin-bottom: 20px;
+}
+.sidebar a {
+  color: #d4a343;
+  padding: 12px 25px;
+  display: block;
+  text-decoration: none;
+  text-align: left;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+.sidebar a.active {
+  background-color: rgba(212,163,67,0.2);
+  border-left: 4px solid #d4a343;
+  padding-left: 21px;
+  color: #fff;
+}
+.sidebar a:hover {
+  background-color: rgba(212,163,67,0.1);
+  color: #f0c96b;
+}
+.sidebar a i {
+  margin-right: 10px;
+}
+.sidebar hr {
+  border-color: #333;
+  width: 80%;
+  margin: 10px auto;
+}
+@media (max-width: 992px) {
+  .sidebar {
+    width: 70px;
+    overflow: hidden;
+  }
+  .sidebar img {
+    width: 50px;
+    height: 50px;
+  }
+  .sidebar h4, .sidebar a span {
+    display: none;
+  }
+  .sidebar a {
+    text-align: center;
+    padding: 12px 5px;
+  }
+  .sidebar a i {
+    margin-right: 0;
+    font-size: 1.2rem;
+  }
+}
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+    flex-direction: row;
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+  .sidebar a {
+    display: inline-block;
+    width: auto;
+    padding: 10px 15px;
+  }
+}
+
+
+    .sidebar a:hover {
+      background-color: #333;
+    }
+
+    .content {
+      margin-left: 240px;
+      padding: 2rem;
+    }
+
+    .card-conta {
+      background-color: #fff;
+      border-radius: 12px;
+      padding: 2rem;
+      box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+      max-width: 700px;
+      margin: 0 auto;
+      text-align: center;
+    }
+
+    .dark-mode {
+      background-color: #121212;
+      color: #f5f5f5;
+    }
+
+    .dark-mode .sidebar {
+      background-color: #000;
+    }
+
+    .dark-mode .content {
+      background-color: #1f1f1f;
+      color: #f5f5f5;
+    }
+
+    .dark-mode .card-conta,
+    .dark-mode .modal-content {
+      background-color: #2a2a2a;
+      color: #f5f5f5;
+    }
+
+    .dark-toggle-btn {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 999;
+    }
+
+    h2 {
+      color: #d4a343;
+    }
+
+    .btn-gold {
+      background-color: #d4a343;
+      border: none;
+      color: #000;
+      font-weight: bold;
+    }
+
+    .btn-gold:hover {
+      background-color: #c49b2e;
+      color: #000;
+    }
+
+    label {
+      font-weight: 500;
+    }
+
+    .foto-perfil {
+      width: 140px;
+      height: 140px;
+      object-fit: cover;
+      border-radius: 10px;
+      border: 3px solid #d4a343;
+      margin-bottom: 15px;
+    }
+
+    @media (max-width: 768px) {
+      .sidebar {
+        width: 100%;
+        height: auto;
+        position: relative;
+      }
+
+      .content {
+        margin-left: 0;
+      }
+    }
+  </style>
+</head>
+<body>
+
+  <button class="dark-toggle-btn" onclick="toggleDarkMode()" title="Alternar modo escuro">
+    <i class="bi bi-moon-stars-fill"></i>
+  </button>
+
+  <nav class="sidebar">
+    <img src="img/logo.png" alt="Logo CONDOMUS">
+    <h4><i class="bi bi-house-door-fill me-1"></i>CONDOMUS</h4>
+
+    <hr>
+    <a href="dashboard_morador.html"><i class="bi bi-grid-fill me-2"></i> Início</a>
+    <a href="prestadores.html"><i class="bi bi-person-lines-fill me-2"></i> Prestadores</a>
+    <a href="minhas_solicitacoes.html"><i class="bi bi-clipboard-check me-2"></i> Minhas solicitações</a>
+    <a href="minhas_avaliacoes.html"><i class="bi bi-star-fill me-2"></i> Minhas avaliações</a>
+    <a href="favoritos.html"><i class="bi bi-heart-fill me-2"></i> Meus favoritos</a>
+    <a href="ranking.html"><i class="bi bi-trophy me-2"></i> Ranking de prestadores</a>
+    <hr>
+    <a href="minha_conta.html"><i class="bi bi-person-circle me-2"></i> Minha conta</a>
+    <a href="index.html" style="margin-bottom: 0px; margin-top: 0px;">
+      <i class="bi bi-box-arrow-right me-2"></i> Sair
+    </a>
+  </nav>
+
+
+
+  <div class="content">
+    <h2 class="mb-4"><i class="bi bi-person-circle me-2"></i>Minha Conta</h2>
+
+    <div class="card-conta">
+      <img id="fotoPerfil" src="img/perfil/renan.png" alt="Foto de perfil" class="foto-perfil">
+      <div class="d-flex justify-content-center gap-2 mb-3">
+        <input type="file" id="uploadFoto" accept="image/*" hidden onchange="preverImagem(this)">
+        <button class="btn btn-sm btn-outline-warning" onclick="document.getElementById('uploadFoto').click()">
+          <i class="bi bi-upload"></i> Alterar foto
+        </button>
+        <button class="btn btn-sm btn-outline-danger" onclick="removerImagem()">
+          <i class="bi bi-trash"></i> Excluir foto
+        </button>
+      </div>
+
+      <p><strong>Nome:</strong> Renan Ramos Manduca</p>
+      <p><strong>E-mail:</strong> renan@email.com</p>
+      <p><strong>Telefone:</strong> (11) 91234-5678</p>
+      <p><strong>Condomínio:</strong> RNI Nações Unidas</p>
+      <p><strong>Bloco:</strong> A</p>
+      <p><strong>Apartamento:</strong> 806</p>
+
+      <div class="mt-4 d-flex justify-content-center gap-3">
+        <button class="btn btn-outline-warning" data-bs-toggle="modal" data-bs-target="#modalEditarConta">
+          <i class="bi bi-pencil-square"></i> Editar dados
+        </button>
+        <button class="btn btn-outline-secondary" data-bs-toggle="modal" data-bs-target="#modalSenha">
+          <i class="bi bi-lock-fill"></i> Alterar senha
+        </button>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal editar dados -->
+  <div class="modal fade" id="modalEditarConta" tabindex="-1" aria-labelledby="modalEditarContaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content rounded-3 shadow">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalEditarContaLabel">Editar Dados da Conta</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label>Nome completo:</label>
+              <input type="text" class="form-control" value="Renan Ramos Manduca">
+            </div>
+            <div class="mb-3">
+              <label>E-mail:</label>
+              <input type="email" class="form-control" value="renan@email.com">
+            </div>
+            <div class="mb-3">
+              <label>Telefone:</label>
+              <input type="text" class="form-control" value="(11) 91234-5678">
+            </div>
+            <div class="mb-3">
+              <label>Bloco:</label>
+              <input type="text" class="form-control" value="A">
+            </div>
+            <div class="mb-3">
+              <label>Apartamento:</label>
+              <input type="text" class="form-control" value="806">
+            </div>
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-gold" type="button" data-bs-dismiss="modal">Salvar alterações</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- Modal alterar senha -->
+  <div class="modal fade" id="modalSenha" tabindex="-1" aria-labelledby="modalSenhaLabel" aria-hidden="true">
+    <div class="modal-dialog">
+      <div class="modal-content rounded-3 shadow">
+        <div class="modal-header">
+          <h5 class="modal-title" id="modalSenhaLabel">Alterar Senha</h5>
+          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Fechar"></button>
+        </div>
+        <div class="modal-body">
+          <form>
+            <div class="mb-3">
+              <label>Senha atual:</label>
+              <input type="password" class="form-control" placeholder="Digite sua senha atual">
+            </div>
+            <div class="mb-3">
+              <label>Nova senha:</label>
+              <input type="password" class="form-control" placeholder="Digite a nova senha">
+            </div>
+            <div class="mb-3">
+              <label>Confirmar nova senha:</label>
+              <input type="password" class="form-control" placeholder="Confirme a nova senha">
+            </div>
+            <div class="d-flex justify-content-end">
+              <button class="btn btn-gold" type="button" data-bs-dismiss="modal">Salvar nova senha</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
+<script>
+  function toggleDarkMode() {
+    document.body.classList.toggle("dark-mode");
+    localStorage.setItem("modoEscuro", document.body.classList.contains("dark-mode"));
+  }
+
+  window.addEventListener("DOMContentLoaded", () => {
+    if (localStorage.getItem("modoEscuro") === "true") {
+      document.body.classList.add("dark-mode");
+    }
+  });
+
+  function preverImagem(input) {
+    if (input.files && input.files[0]) {
+      const reader = new FileReader();
+      reader.onload = function (e) {
+        document.getElementById('fotoPerfil').src = e.target.result;
+      }
+      reader.readAsDataURL(input.files[0]);
+    }
+  }
+
+  function removerImagem() {
+    const confirmacao = confirm("Tem certeza que deseja excluir esta foto?");
+    if (confirmacao) {
+      document.getElementById('fotoPerfil').src = 'img/perfil/renan.png';
+      document.getElementById('uploadFoto').value = '';
+    }
+  }
+</script>
+</body>
+</html>

@@ -1,0 +1,297 @@
+/* Definição das variáveis de cor do projeto */
+:root {
+  --cor-ouro-principal: #d4a343;
+  --cor-ouro-hover: #f0c96b;
+  --cor-ouro-botao-dark: #d4a63f;
+  --cor-ouro-botao-dark-hover: #c1922f;
+  --cor-btn-gold: #c49b48;
+  --cor-btn-gold-hover: #b3862d;
+  --cor-fundo-dark: #121212;
+  --cor-card-dark: #1f1f1f;
+  --cor-sidebar-dark: #000;
+  --cor-texto-escuro: #333;
+  --cor-texto-claro: #f5f5f5;
+  --cor-borda-dark: #444;
+  --cor-nome-prestador-dark: #ffcc7a;
+  --cor-nome-prestador-light: #6b512d;
+  --cor-link-light: #8e7031;
+}
+
+/* Estilos Globais e da Página de Login */
+html, body {
+  height: 100%;
+  margin: 0;
+}
+
+body {
+  font-family: 'Poppins', sans-serif;
+  transition: background 0.3s ease, color 0.3s ease;
+}
+
+/* Estilo específico para o fundo da página de login */
+body:has(.card.text-center) {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, #0e0b05, #1e170a, #3c2f1c, #bfa76f);
+  background-size: 400% 400%;
+  animation: gradientBG 15s ease infinite;
+  padding: 10px;
+  overflow: hidden;
+}
+
+@keyframes gradientBG {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.card {
+  border-radius: 12px;
+  box-shadow: 0 6px 18px rgba(0, 0, 0, 0.4);
+  border: 1px solid rgba(255, 255, 255, 0.05);
+  padding: 2rem;
+  background-color: white;
+  max-width: 400px;
+  width: 100%;
+}
+
+.btn-gold {
+  background-color: var(--cor-btn-gold);
+  border: none;
+  color: white;
+  font-weight: 600;
+}
+
+.btn-gold:hover {
+  background-color: var(--cor-btn-gold-hover);
+}
+
+.form-label, a {
+  color: var(--cor-link-light);
+}
+
+.form-control:focus {
+  border-color: var(--cor-btn-gold);
+  box-shadow: 0 0 0 0.2rem rgba(196, 155, 72, 0.25);
+}
+
+.toggle-password {
+  cursor: pointer;
+}
+
+.gold-line {
+  width: 120px;
+  height: 3px;
+  background-color: var(--cor-btn-gold);
+  margin: 0 auto 20px auto;
+  border-radius: 2px;
+}
+
+@media (max-width: 576px) {
+  .card img {
+    width: 120px !important;
+    height: 120px !important;
+  }
+}
+
+/* Estilos do Dashboard */
+body:has(.sidebar) {
+  background: linear-gradient(120deg, #3c2b1c, #6b512d, #8a6d41);
+  background-size: 200% 200%;
+  animation: bgMove 15s ease infinite;
+  color: var(--cor-texto-escuro);
+}
+
+@keyframes bgMove {
+  0% { background-position: 0% 50%; }
+  50% { background-position: 100% 50%; }
+  100% { background-position: 0% 50%; }
+}
+
+.sidebar {
+  height: 100vh;
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 240px;
+  background-color: var(--cor-fundo-dark);
+  padding: 20px 0;
+  color: white;
+  text-align: center;
+  display: flex;
+  flex-direction: column;
+  justify-content: start;
+}
+
+.sidebar img {
+  width: 180px;
+  height: 180px;
+  object-fit: cover;
+  border-radius: 50%;
+  margin: 0 auto 10px;
+  box-shadow: 0 0 15px rgba(212, 163, 67, 0.5);
+}
+
+.sidebar h4 {
+  font-weight: bold;
+  font-size: 1.2rem;
+  color: var(--cor-ouro-principal);
+  margin-bottom: 20px;
+}
+
+.sidebar hr {
+  border-color: var(--cor-borda-dark);
+  margin: 10px 15px;
+}
+
+.sidebar a {
+  color: var(--cor-ouro-principal);
+  padding: 12px 25px;
+  display: block;
+  text-decoration: none;
+  text-align: left;
+  transition: all 0.3s ease;
+  font-weight: 500;
+}
+
+.sidebar a:hover {
+  background-color: rgba(212, 163, 67, 0.1);
+  color: var(--cor-ouro-hover);
+}
+
+.sidebar a.active {
+  background-color: rgba(212, 163, 67, 0.2);
+  border-left: 4px solid var(--cor-ouro-principal);
+  padding-left: 21px;
+  color: var(--cor-texto-claro);
+}
+
+.content {
+  margin-left: 240px;
+  padding: 2rem;
+}
+
+.card-custom {
+  background-color: #fff;
+  border-radius: 12px;
+  padding: 1.5rem;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.12);
+  margin-bottom: 2rem;
+  transition: box-shadow 0.3s ease;
+}
+
+.highlight {
+  color: var(--cor-ouro-principal);
+}
+
+.content .gold-line {
+  width: 100px;
+  margin: -8px 0 25px 0;
+}
+
+.list-group-item {
+  transition: background-color 0.3s ease, transform 0.2s ease;
+  color: var(--cor-texto-escuro);
+}
+
+.list-group-item:hover {
+  background-color: #fdf7ec;
+  transform: scale(1.01);
+  cursor: pointer;
+}
+
+.nome-prestador {
+  color: var(--cor-nome-prestador-light);
+  font-weight: 500;
+}
+
+.nome-prestador:hover {
+  text-decoration: underline;
+}
+
+.estrela-dourada {
+  color: var(--cor-ouro-principal);
+  font-weight: bold;
+}
+
+@media (max-width: 768px) {
+  .sidebar {
+    width: 100%;
+    height: auto;
+    position: relative;
+  }
+  .content {
+    margin-left: 0;
+  }
+}
+
+/* Estilos do Modo Escuro (Dark Mode) */
+.dark-mode {
+  background-color: var(--cor-fundo-dark) !important;
+  color: var(--cor-texto-claro) !important;
+}
+
+.dark-mode .card,
+.dark-mode .card-custom {
+  background-color: var(--cor-card-dark) !important;
+  color: var(--cor-texto-claro) !important;
+}
+
+.dark-mode .form-label,
+.dark-mode a,
+.dark-mode h3 {
+  color: var(--cor-texto-claro) !important;
+}
+
+.dark-mode .form-control {
+  background-color: #2a2a2a !important;
+  color: var(--cor-texto-claro) !important;
+  border-color: var(--cor-borda-dark) !important;
+}
+
+.dark-mode .form-control::placeholder {
+  color: #cccccc !important;
+}
+
+.dark-mode .btn-gold {
+  background-color: var(--cor-ouro-botao-dark);
+  color: var(--cor-card-dark);
+}
+
+.dark-mode .btn-gold:hover {
+  background-color: var(--cor-ouro-botao-dark-hover);
+  color: var(--cor-sidebar-dark);
+}
+
+.dark-mode .input-group-text {
+  background-color: #2a2a2a !important;
+  border-color: var(--cor-borda-dark) !important;
+  color: var(--cor-texto-claro) !important;
+}
+
+.dark-mode .sidebar {
+  background-color: var(--cor-sidebar-dark);
+}
+
+.dark-mode .list-group-item {
+  background-color: #2a2a2a;
+  color: var(--cor-texto-claro) !important;
+}
+
+.dark-mode .nome-prestador {
+  color: var(--cor-nome-prestador-dark);
+}
+
+/* Botão de Alternar Tema */
+.dark-toggle-btn {
+  position: fixed;
+  top: 15px;
+  right: 15px;
+  background: transparent;
+  border: none;
+  color: white;
+  font-size: 1.5rem;
+  cursor: pointer;
+  z-index: 999;
+}

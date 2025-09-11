@@ -1,0 +1,289 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Cadastro - CONDOMUS</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet" />
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #3c2b1c, #6b512d);
+      color: #333;
+      transition: background 0.3s ease;
+    }
+    .form-container {
+      max-width: 500px;
+      margin: 30px auto;
+      background-color: #fff;
+      padding: 2rem;
+      border-radius: 12px;
+      box-shadow: 0 0 10px rgba(0,0,0,0.2);
+      overflow-y: auto;
+      max-height: 90vh;
+      transition: background-color 0.3s ease, color 0.3s ease;
+    }
+    .logo {
+      display: block;
+      margin: 0 auto 10px;
+      width: 200px;
+      border-radius: 50%;
+    }
+    .title-wrapper { text-align: center; }
+    .title {
+      display: inline-block;
+      font-weight: bold;
+      font-size: 1.6rem;
+      border-bottom: 3px solid #d4a343;
+      padding-bottom: 5px;
+      margin-bottom: 20px;
+    }
+    .step-indicator {
+      display: flex;
+      justify-content: space-between;
+      font-size: 0.85rem;
+      margin-bottom: 20px;
+      padding: 0 5px;
+    }
+    .step-indicator span {
+      flex: 1;
+      text-align: center;
+      color: #999;
+    }
+    .step-indicator .active {
+      font-weight: bold;
+      color: #d4a343;
+    }
+    .btn-clear { margin-top: 10px; }
+    #btnTopo {
+      position: fixed;
+      bottom: 30px;
+      right: 30px;
+      z-index: 1000;
+      display: none;
+    }
+    .erro-senha {
+      color: red;
+      font-size: 0.9rem;
+      display: none;
+    }
+    .toggle-password {
+      position: absolute;
+      right: 10px;
+      top: 38px;
+      cursor: pointer;
+      color: #d4a343;
+    }
+    .input-icon-left {
+      position: absolute;
+      top: 38px;
+      left: 10px;
+      font-size: 1.2rem;
+      color: #d4a343;
+    }
+    .position-relative input { padding-left: 2rem; }
+    .link-voltar {
+      display: block;
+      text-align: center;
+      margin-top: 20px;
+      color: #d4a343;
+      font-weight: 500;
+      text-decoration: none;
+    }
+    .link-voltar:hover { text-decoration: underline; }
+
+    select.form-select {
+      background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' fill='%23d4a343' viewBox='0 0 16 16'%3E%3Cpath d='M3.204 5h9.592L8 10.481 3.204 5z'/%3E%3C/svg%3E");
+      background-repeat: no-repeat;
+      background-position: right 1rem center;
+      background-size: 1em;
+      appearance: none;
+      padding-right: 2rem;
+    }
+
+    body.dark-mode {
+      background: #1c1c1c;
+      color: #f5f5f5;
+    }
+    .dark-mode .form-container {
+      background-color: #2a2a2a;
+      color: #f5f5f5;
+    }
+    .dark-mode .form-control,
+    .dark-mode .form-select {
+      background-color: #3a3a3a;
+      color: #f5f5f5;
+      border-color: #555;
+    }
+    .dark-mode .form-control::placeholder {
+      color: #ccc;
+    }
+    .dark-mode .form-check-label,
+    .dark-mode .form-label {
+      color: #f5f5f5;
+    }
+
+    .dark-toggle-btn {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      color: white;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 999;
+    }
+  </style>
+</head>
+<body>
+  <button class="dark-toggle-btn" onclick="toggleDarkMode()" title="Modo escuro">
+    <i class="bi bi-moon-stars-fill"></i>
+  </button>
+
+  <div class="form-container">
+    <img src="img/logo.png" alt="Logo CONDOMUS" class="logo" />
+    <div class="title-wrapper">
+      <h2 class="title">Cadastro CONDOMUS</h2>
+    </div>
+
+    <div class="step-indicator">
+      <span id="etapa1" class="active">1. Identificação</span>
+      <span id="etapa2">2. Detalhes</span>
+      <span id="etapa3">3. Finalização</span>
+    </div>
+
+    <div class="mb-3">
+      <label for="tipoUsuario" class="form-label">Sou:</label>
+      <select class="form-select" id="tipoUsuario" required onchange="mostrarCampos()">
+        <option value="">Selecione</option>
+        <option value="morador">Morador</option>
+        <option value="sindico">Síndico</option>
+        <option value="prestador">Prestador de Serviço</option>
+      </select>
+    </div>
+
+    <form id="formCadastro" novalidate>
+      <div id="camposComuns" style="display:none;">
+        <div class="mb-3">
+          <label class="form-label" id="labelNome">Nome completo</label>
+          <input type="text" class="form-control" id="inputNome" placeholder="Digite o nome completo" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">E-mail</label>
+          <input type="email" class="form-control" id="inputEmail" placeholder="Digite seu e-mail" required />
+        </div>
+        <div class="mb-3 position-relative">
+          <label class="form-label">Telefone</label>
+          <i class="bi bi-telephone-fill input-icon-left"></i>
+          <input type="text" class="form-control" id="telefone" placeholder="(11) 91234-5678" required />
+        </div>
+        <div class="form-check mb-3">
+          <input type="checkbox" class="form-check-input" id="novidades" />
+          <label for="novidades" class="form-check-label">Deseja receber novidades por e-mail?</label>
+        </div>
+        <div id="fotoComum" class="mb-3" style="display:none;">
+          <label class="form-label">Foto de Perfil (opcional)</label>
+          <input type="file" class="form-control" accept="image/*" />
+        </div>
+      </div>
+
+      <div id="camposMoradorSindico" style="display:none;">
+        <div class="mb-3">
+          <label class="form-label">CPF</label>
+          <input type="text" class="form-control" placeholder="Digite o CPF" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Condomínio</label>
+          <select class="form-select" required>
+            <option selected disabled>Selecione seu condomínio</option>
+            <option>RNI Nações Unidas</option>
+            <option>Vitta Camélias</option>
+          </select>
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Bloco</label>
+          <input type="text" class="form-control" placeholder="Digite o bloco" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Apartamento</label>
+          <input type="text" class="form-control" placeholder="Digite o número do apartamento" required />
+        </div>
+      </div>
+
+      <div id="camposPrestador" style="display:none;">
+        <div class="mb-3">
+          <label class="form-label">CNPJ</label>
+          <input type="text" class="form-control" placeholder="Digite o CNPJ" required />
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Área de Atuação</label>
+          <select class="form-select" required>
+  <option selected disabled>Selecione sua área de atuação</option>
+  <option>Serviços de Elétrica</option>
+  <option>Serviços Hidráulicos</option>
+  <option>Serviços de Pintura</option>
+  <option>Serviços de Marcenaria</option>
+  <option>Serviços de Vidros e Espelhos</option>
+  <option>Instalação de Ar-condicionado</option>
+  <option>Manutenção Predial</option>
+  <option>Instalação de Câmeras e Alarmes</option>
+  <option>Jardinagem e Paisagismo</option>
+  <option>Limpeza e Conservação</option>
+  <option>Dedetização</option>
+  <option>Treinador ou Personal Trainer</option>
+  <option>Nutricionista</option>
+  <option>Fisioterapeuta</option>
+  <option>Esteticista / Massoterapeuta</option>
+  <option>Cabelereiro(a) / Barber Shop</option>
+  <option>Manicure / Pedicure</option>
+  <option>Cuidadores de Idosos</option>
+  <option>Cuidadores de Pets / Dog Walker</option>
+  <option>Aulas Particulares / Reforço Escolar</option>
+  <option>Tradução / Redação / Revisor</option>
+  <option>TI / Suporte Técnico / Montagem de PC</option>
+  <option>Marketing Digital / Design</option>
+  <option>Assistência técnica celular / notebook</option>
+  <option>Costureira / Ajustes de roupas</option>
+  <option>Montagem de Móveis</option>
+  <option>Chaveiro</option>
+  <option>Outros</option>
+</select>
+
+        </div>
+        <div class="mb-3">
+          <label class="form-label">Foto, cartão de visita ou logomarca</label>
+          <input type="file" class="form-control" accept="image/*,application/pdf" />
+        </div>
+      </div>
+
+      <button type="submit" class="btn btn-warning w-100 fw-bold">Finalizar cadastro</button>
+    </form>
+
+    <a href="index.html" class="link-voltar"><i class="bi bi-arrow-left-circle"></i> Voltar ao login</a>
+  </div>
+
+  <script>
+    function mostrarCampos() {
+      const tipo = document.getElementById("tipoUsuario").value;
+      document.getElementById("camposComuns").style.display = tipo ? "block" : "none";
+      document.getElementById("camposMoradorSindico").style.display = (tipo === "morador" || tipo === "sindico") ? "block" : "none";
+      document.getElementById("camposPrestador").style.display = tipo === "prestador" ? "block" : "none";
+      document.getElementById("fotoComum").style.display = (tipo === "morador" || tipo === "sindico") ? "block" : "none";
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      localStorage.setItem("modoEscuro", document.body.classList.contains("dark-mode"));
+    }
+
+    window.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("modoEscuro") === "true") {
+        document.body.classList.add("dark-mode");
+      }
+    });
+  </script>
+</body>
+</html>

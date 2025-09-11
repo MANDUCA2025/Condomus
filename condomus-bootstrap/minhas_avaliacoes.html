@@ -1,0 +1,330 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+  <title>Minhas Avaliações | CONDOMUS</title>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+  <style>
+    body {
+      font-family: 'Poppins', sans-serif;
+      background: linear-gradient(to right, #3c2b1c, #6b512d);
+      color: #1a1a1a;
+      transition: background 0.3s ease;
+    }
+
+    .sidebar {
+      height: 100vh;
+      position: fixed;
+      top: 0;
+      left: 0;
+      width: 240px;
+      background-color: #121212;
+      padding: 20px 0;
+      color: white;
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      justify-content: start;
+    }
+
+    .sidebar img {
+      width: 180px;
+      height: 180px;
+      object-fit: cover;
+      border-radius: 50%;
+      margin: 0 auto 10px;
+      box-shadow: 0 0 15px rgba(212, 163, 67, 0.5);
+    }
+
+    .sidebar h4 {
+      font-weight: bold;
+      font-size: 1.2rem;
+      color: #d4a343;
+      margin-bottom: 20px;
+    }
+
+    .sidebar hr {
+      border-color: #444;
+      margin: 10px 15px;
+    }
+
+    .sidebar a {
+      color: #d4a343;
+      padding: 12px 25px;
+      display: block;
+      text-decoration: none;
+      text-align: left;
+      transition: all 0.3s ease;
+      font-weight: 500;
+    }
+
+    .sidebar a:hover {
+      background-color: rgba(212, 163, 67, 0.1);
+      color: #f0c96b;
+    }
+
+    .sidebar a.active {
+      background-color: rgba(212, 163, 67, 0.2);
+      border-left: 4px solid #d4a343;
+      padding-left: 21px;
+      color: #fff;
+    }
+
+    .content {
+      margin-left: 240px;
+      padding: 2rem;
+    }
+
+    .dark-mode {
+      background-color: #121212;
+      color: #f5f5f5;
+    }
+
+    .dark-mode .sidebar {
+      background-color: #000;
+    }
+
+    .dark-mode .content {
+      background-color: #1f1f1f;
+      color: #f5f5f5;
+    }
+
+
+    .dark-mode .card-avaliacao {
+      background-color: #2a2a2a;
+      color: #f5f5f5;
+    }
+
+    .card-avaliacao h5,
+.card-avaliacao p,
+.card-avaliacao .text-muted,
+.card-avaliacao .fw-bold,
+.card-avaliacao small {
+  color: #fff !important;
+}
+
+h2 {
+  color: #fff !important;
+}
+
+h2 i {
+  color: #d4a343 !important;
+}
+
+    .dark-mode .card-avaliacao .text-muted {
+      color: #dddddd !important;
+    }
+
+    .form-select, .form-control {
+      border-radius: 8px;
+      font-weight: 500;
+    }
+
+    .dark-mode .form-select,
+    .dark-mode .form-control {
+      background-color: #2a2a2a;
+      color: #f5f5f5;
+      border-color: #555;
+    }
+
+    .rating-stars {
+      color: #ffc107;
+    }
+
+    .btn-gold {
+      background-color: #d4a343;
+      border: none;
+      color: #000;
+    }
+
+    .btn-gold:hover {
+      background-color: #c49b2e;
+    }
+
+    .dark-toggle-btn {
+      position: fixed;
+      top: 15px;
+      right: 15px;
+      background: transparent;
+      border: none;
+      color: #fff;
+      font-size: 1.5rem;
+      cursor: pointer;
+      z-index: 1000;
+    }
+    #buscaNome {
+  background-color: #f8f9fa;
+  color: #1a1a1a;
+  border: 1px solid #ccc;
+}
+
+#buscaNome::placeholder {
+  color: #666;
+  opacity: 1;
+}
+
+.dark-mode #buscaNome {
+  background-color: #2c2c2c;
+  color: #f5f5f5;
+  border: 1px solid #555;
+}
+
+.dark-mode #buscaNome::placeholder {
+  color: #bbbbbb;
+  opacity: 1;
+}
+
+  </style>
+</head>
+<body>
+  <button class="dark-toggle-btn" onclick="toggleDarkMode()" title="Modo escuro">
+    <i class="bi bi-moon-stars-fill"></i>
+  </button>
+
+  <div class="sidebar">
+    <img src="img/logo.png" alt="Logo CONDOMUS">
+<h4 style="color: #d4a343;"><i class="bi bi-house-door-fill me-1"></i>CONDOMUS</h4>
+    <a href="dashboard_morador.html"><i class="bi bi-grid-fill me-2"></i> Início</a>
+    <a href="prestadores.html"><i class="bi bi-people-fill me-2"></i> Prestadores</a>
+    <a href="minhas_solicitacoes.html"><i class="bi bi-clipboard-check me-2"></i> Minhas solicitações</a>
+    <a href="#" class="active"><i class="bi bi-star-fill me-2"></i> Minhas avaliações</a>
+    <a href="favoritos.html"><i class="bi bi-heart-fill me-2"></i> Meus favoritos</a>
+    <a href="ranking.html"><i class="bi bi-trophy-fill me-2"></i> Ranking de prestadores</a>
+    <hr class="text-secondary mx-3">
+    <a href="minha_conta.html"><i class="bi bi-person-circle me-2"></i> Minha conta</a>
+    <a href="#"><i class="bi bi-box-arrow-right me-2"></i> Sair</a>
+  </div>
+
+  <div class="content">
+    <h2 class="mb-4"><i class="bi bi-star-fill me-2"></i>Minhas Avaliações</h2>
+    <div class="filtros d-flex flex-wrap gap-2 mb-3">
+      <input type="text" id="buscaNome" class="form-control w-auto" placeholder="Buscar por nome">
+      <input type="date" id="filtroData" class="form-control w-auto">
+      <select id="filtroArea" class="form-select w-auto">
+        <option value="">Todas as áreas</option>
+        <option>Serviços de Vidros e Espelhos</option>
+        <option>Serviços de Marcenaria</option>
+      </select>
+      <select id="filtroNota" class="form-select w-auto">
+        <option value="0">Todas as notas</option>
+        <option value="8">Acima de 8</option>
+        <option value="9">Acima de 9</option>
+      </select>
+      <button class="btn btn-outline-light" onclick="exportarCSV()"><i class="bi bi-download me-1"></i>Exportar CSV</button>
+    </div>
+
+    <div id="listaAvaliacoes"></div>
+    <div id="mensagemVazia" class="text-center text-muted mt-4" style="display: none;">Você ainda não fez nenhuma avaliação.</div>
+  </div>
+
+  <script>
+    const avaliacoes = [
+      {
+        nome: "Maria Espelhos",
+        area: "Serviços de Vidros e Espelhos",
+        nota: 9.84,
+        comentario: "Pontual e excelente acabamento!",
+        foto: "img/perfil1.jpg",
+        data: "2025-06-27"
+      },
+      {
+        nome: "João Madeira",
+        area: "Serviços de Marcenaria",
+        nota: 8.75,
+        comentario: "Bom atendimento, leve atraso.",
+        foto: "img/perfil2.jpg",
+        data: "2025-06-10"
+      }
+    ];
+
+    function exibirAvaliacoes() {
+      const container = document.getElementById("listaAvaliacoes");
+      const areaFiltro = document.getElementById("filtroArea").value;
+      const notaFiltro = parseFloat(document.getElementById("filtroNota").value);
+      const nomeBusca = document.getElementById("buscaNome").value.toLowerCase();
+      const dataFiltro = document.getElementById("filtroData").value;
+
+      const filtradas = avaliacoes.filter(a =>
+        (!areaFiltro || a.area === areaFiltro) &&
+        (!nomeBusca || a.nome.toLowerCase().includes(nomeBusca)) &&
+        (!dataFiltro || new Date(a.data) >= new Date(dataFiltro)) &&
+        a.nota >= notaFiltro
+      );
+
+      container.innerHTML = "";
+      document.getElementById("mensagemVazia").style.display = filtradas.length ? "none" : "block";
+
+      filtradas.forEach(a => {
+        const estrelas = "⭐".repeat(Math.round(a.nota));
+        container.innerHTML += `
+          <div class="card-avaliacao">
+            <div class="d-flex justify-content-between align-items-center">
+              <div class="d-flex align-items-center">
+                <img src="${a.foto}" class="me-2" width="48" height="48" style="border-radius: 50%; object-fit: cover;">
+                <div>
+                  <h5 class="mb-0">${a.nome}</h5>
+                  <small class="text-muted">${a.area}</small>
+                </div>
+              </div>
+              <div class="text-end">
+                <div class="fw-bold">${a.nota.toFixed(2)}</div>
+                <div class="rating-stars">${estrelas}</div>
+              </div>
+            </div>
+            <p class="text-muted mt-2">Avaliado em ${a.data.split('-').reverse().join('/')}</p>
+            <p>${a.comentario}</p>
+          </div>`;
+      });
+    }
+
+    function exportarCSV() {
+      const areaFiltro = document.getElementById("filtroArea").value;
+      const notaFiltro = parseFloat(document.getElementById("filtroNota").value);
+      const nomeBusca = document.getElementById("buscaNome").value.toLowerCase();
+      const dataFiltro = document.getElementById("filtroData").value;
+
+      const linhas = ["Nome,Área,Nota,Comentário,Data"];
+      const filtradas = avaliacoes.filter(a =>
+        (!areaFiltro || a.area === areaFiltro) &&
+        (!nomeBusca || a.nome.toLowerCase().includes(nomeBusca)) &&
+        (!dataFiltro || new Date(a.data) >= new Date(dataFiltro)) &&
+        a.nota >= notaFiltro
+      );
+
+      filtradas.forEach(a => {
+        const linha = [a.nome, a.area, a.nota.toFixed(2), `"${a.comentario}"`, a.data.split('-').reverse().join('/')].join(",");
+        linhas.push(linha);
+      });
+
+      const csvContent = "data:text/csv;charset=utf-8," + linhas.join("\\n");
+      const encodedUri = encodeURI(csvContent);
+      const link = document.createElement("a");
+      link.setAttribute("href", encodedUri);
+      link.setAttribute("download", "avaliacoes_condomus.csv");
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+    }
+
+    function toggleDarkMode() {
+      document.body.classList.toggle("dark-mode");
+      localStorage.setItem("modoEscuro", document.body.classList.contains("dark-mode"));
+    }
+
+    document.getElementById("filtroArea").addEventListener("change", exibirAvaliacoes);
+    document.getElementById("filtroNota").addEventListener("change", exibirAvaliacoes);
+    document.getElementById("buscaNome").addEventListener("input", exibirAvaliacoes);
+    document.getElementById("filtroData").addEventListener("change", exibirAvaliacoes);
+
+    window.addEventListener("DOMContentLoaded", () => {
+      if (localStorage.getItem("modoEscuro") === "true") {
+        document.body.classList.add("dark-mode");
+      }
+      exibirAvaliacoes();
+    });
+  </script>
+</body>
+</html>

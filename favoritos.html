@@ -1,707 +1,136 @@
 <!DOCTYPE html>
 <html lang="pt-br">
 <head>
-  <meta charset="UTF-8" />
-  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-  <title>Meus Favoritos | CONDOMUS</title>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
-  <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
-  <style>
-    :root {
-      --gold: #d4a343;
-      --gold-light: #f0c96b;
-      --gold-dark: #c49b2e;
-      --dark-bg: #121212;
-      --light-bg: #ffffff;
-      --text-dark: #333333;
-      --text-light: #f5f5f5;
-      --transition: all 0.3s ease;
-    }
-
-    body {
-      font-family: 'Poppins', sans-serif;
-      background: linear-gradient(to right, #3c2b1c, #6b512d);
-      color: var(--text-dark);
-      transition: background 0.5s ease, color 0.3s ease;
-    }
-
-    /* Sidebar (mantido exatamente como estava) */
-    .sidebar {
-      height: 100vh;
-      position: fixed;
-      top: 0;
-      left: 0;
-      width: 240px;
-      background-color: #121212;
-      padding: 20px 0;
-      color: white;
-      text-align: center;
-      display: flex;
-      flex-direction: column;
-      justify-content: start;
-    }
-
-    .sidebar img {
-      width: 180px;
-      height: 180px;
-      object-fit: cover;
-      border-radius: 50%;
-      margin: 0 auto 10px;
-      box-shadow: 0 0 15px rgba(212, 163, 67, 0.5);
-    }
-
-    .sidebar h4 {
-      font-weight: bold;
-      font-size: 1.2rem;
-      color: #d4a343;
-      margin-bottom: 20px;
-    }
-
-    .sidebar hr {
-      border-color: #444;
-      margin: 10px 15px;
-    }
-
-    .sidebar a {
-      color: #d4a343;
-      padding: 12px 25px;
-      display: block;
-      text-decoration: none;
-      text-align: left;
-      transition: all 0.3s ease;
-      font-weight: 500;
-    }
-
-    .sidebar a:hover {
-      background-color: rgba(212, 163, 67, 0.1);
-      color: #f0c96b;
-    }
-
-    .sidebar a.active {
-      background-color: rgba(212, 163, 67, 0.2);
-      border-left: 4px solid #d4a343;
-      padding-left: 21px;
-      color: #fff;
-    }
-
-    .content {
-      margin-left: 240px;
-      padding: 2rem;
-    }
-
-    /* Dark Mode */
-    .dark-mode {
-      background: linear-gradient(to right, #1a120b, #2c2416);
-      color: var(--text-light);
-    }
-
-    .dark-mode .content {
-      background-color: #1f1f1f;
-    }
-
-    /* Header */
-    .page-header {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      margin-bottom: 2rem;
-    }
-
-    .page-title {
-      color: var(--gold);
-      font-weight: 600;
-      display: flex;
-      align-items: center;
-    }
-
-    .page-title i {
-      margin-right: 0.75rem;
-    }
-
-    /* Cards de Favoritos */
-    .card-favorito {
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 12px;
-      padding: 1.5rem;
-      margin-bottom: 1.5rem;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
-      transition: all 0.3s cubic-bezier(0.25, 0.8, 0.25, 1);
-      position: relative;
-    }
-
-    .card-favorito:hover {
-      transform: translateY(-5px);
-      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.15);
-    }
-
-    .dark-mode .card-favorito {
-      background: rgba(42, 42, 42, 0.9);
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3);
-    }
-
-    .favorito-actions {
-      position: absolute;
-      top: 1rem;
-      right: 1rem;
-      display: flex;
-      gap: 0.5rem;
-    }
-
-    .btn-favorito {
-      background: transparent;
-      border: none;
-      color: var(--gold);
-      font-size: 1.25rem;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .btn-favorito:hover {
-      transform: scale(1.1);
-      color: #dc3545;
-    }
-
-    .btn-contato {
-      background: transparent;
-      border: none;
-      color: #0d6efd;
-      font-size: 1.25rem;
-      cursor: pointer;
-      transition: var(--transition);
-    }
-
-    .btn-contato:hover {
-      transform: scale(1.1);
-      color: #0b5ed7;
-    }
-
-    .prestador-info {
-      display: flex;
-      align-items: center;
-      margin-bottom: 1rem;
-    }
-
-    .prestador-img {
-      width: 80px;
-      height: 80px;
-      border-radius: 50%;
-      object-fit: cover;
-      margin-right: 1.5rem;
-      border: 3px solid var(--gold);
-    }
-
-    .prestador-details {
-      flex: 1;
-    }
-
-    .prestador-name {
-      font-weight: 600;
-      margin-bottom: 0.25rem;
-      color: inherit;
-    }
-
-    .prestador-category {
-      color: var(--gold);
-      font-weight: 500;
-      margin-bottom: 0.5rem;
-    }
-
-    .prestador-rating {
-      display: flex;
-      align-items: center;
-    }
-
-    .rating-stars {
-      color: #ffc107;
-      margin-right: 0.5rem;
-    }
-
-    .rating-value {
-      font-weight: 600;
-    }
-
-    .prestador-meta {
-      display: flex;
-      gap: 1.5rem;
-      margin-top: 1rem;
-    }
-
-    .meta-item {
-      display: flex;
-      align-items: center;
-    }
-
-    .meta-item i {
-      margin-right: 0.5rem;
-      color: var(--gold);
-    }
-
-    .badge-status {
-      padding: 0.35em 0.65em;
-      border-radius: 50rem;
-      font-weight: 500;
-    }
-
-    .badge-online {
-      background-color: #28a745;
-      color: white;
-    }
-
-    .badge-offline {
-      background-color: #6c757d;
-      color: white;
-    }
-
-    .badge-top {
-      background-color: var(--gold);
-      color: #000;
-    }
-
-    /* Filtros */
-    .filters-container {
-      background: rgba(255, 255, 255, 0.9);
-      padding: 1rem;
-      border-radius: 12px;
-      margin-bottom: 2rem;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .dark-mode .filters-container {
-      background: rgba(42, 42, 42, 0.9);
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.3);
-    }
-
-    .filter-group {
-      display: flex;
-      flex-wrap: wrap;
-      gap: 1rem;
-      align-items: center;
-    }
-
-    .form-control, .form-select {
-      border-radius: 8px;
-      font-weight: 500;
-      min-width: 180px;
-    }
-
-    .dark-mode .form-control,
-    .dark-mode .form-select {
-      background-color: #2a2a2a;
-      color: var(--text-light);
-      border-color: #555;
-    }
-
-    /* Mensagem vazia */
-    .empty-message {
-      text-align: center;
-      padding: 3rem;
-      background: rgba(255, 255, 255, 0.9);
-      border-radius: 12px;
-      box-shadow: 0 2px 8px rgba(0, 0, 0, 0.1);
-    }
-
-    .dark-mode .empty-message {
-      background: rgba(42, 42, 42, 0.9);
-    }
-
-    .empty-icon {
-      font-size: 3rem;
-      color: var(--gold);
-      margin-bottom: 1rem;
-    }
-
-    /* Botão Dark Mode */
-    .dark-toggle-btn {
-      position: fixed;
-      top: 15px;
-      right: 15px;
-      background: transparent;
-      border: none;
-      color: #fff;
-      font-size: 1.5rem;
-      cursor: pointer;
-      z-index: 1000;
-      transition: transform 0.3s ease;
-    }
-
-    .dark-toggle-btn:hover {
-      transform: scale(1.1);
-    }
-
-    .dark-mode .dark-toggle-btn {
-      color: var(--gold);
-    }
-  </style>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <title>Meus Favoritos | CONDOMUS</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet"/>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap-icons@1.10.5/font/bootstrap-icons.css" rel="stylesheet"/>
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@400;600&display=swap" rel="stylesheet"/>
+    <link rel="stylesheet" href="css/style.css">
 </head>
 <body>
-  <button class="dark-toggle-btn" onclick="toggleDarkMode()" title="Modo escuro" aria-label="Alternar modo escuro">
-    <i class="bi bi-moon-stars-fill"></i>
-  </button>
 
-  <!-- Sidebar (mantido exatamente como estava) -->
-  <nav class="sidebar">
-    <img src="img/logo.png" alt="Logo CONDOMUS">
-    <h4><i class="bi bi-house-door-fill me-1"></i>CONDOMUS</h4>
+    <button class="dark-toggle-btn" title="Alternar tema">
+        <i class="bi bi-moon-stars-fill"></i>
+    </button>
 
-    <hr>
-    <a href="dashboard_morador.html"><i class="bi bi-grid-fill me-2"></i> Início</a>
-    <a href="prestadores.html"><i class="bi bi-person-lines-fill me-2"></i> Prestadores</a>
-    <a href="minhas_solicitacoes.html"><i class="bi bi-clipboard-check me-2"></i> Minhas solicitações</a>
-    <a href="minhas_avaliacoes.html"><i class="bi bi-star-fill me-2"></i> Minhas avaliações</a>
-    <a href="favoritos.html"><i class="bi bi-heart-fill me-2"></i> Meus favoritos</a>
-    <a href="ranking.html"><i class="bi bi-trophy me-2"></i> Ranking de prestadores</a>
-    <hr>
-    <a href="minha_conta.html"><i class="bi bi-person-circle me-2"></i> Minha conta</a>
-    <a href="index.html" style="margin-bottom: 0px; margin-top: 0px;">
-      <i class="bi bi-box-arrow-right me-2"></i> Sair
-    </a>
-  </nav>
+    <nav class="sidebar">
+        <img src="img/logo.png" alt="Logo CONDOMUS">
+        <h4><i class="bi bi-house-door-fill me-1"></i>CONDOMUS</h4>
+        <hr>
+        <a href="dashboard_morador.html"><i class="bi bi-grid-fill me-2"></i> Início</a>
+        <a href="prestadores.html"><i class="bi bi-person-lines-fill me-2"></i> Prestadores</a>
 
-  <div class="content">
-    <div class="page-header">
-      <h1 class="page-title"><i class="bi bi-heart-fill"></i> Meus Favoritos</h1>
-      <div class="d-flex align-items-center">
-        <span class="me-3">Ordenar por:</span>
-        <select class="form-select" id="ordenarPor" style="width: auto;">
-          <option value="recentes">Mais recentes</option>
-          <option value="nota">Melhor avaliação</option>
-          <option value="nome">Ordem alfabética</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Filtros -->
-    <div class="filters-container">
-      <div class="filter-group">
-        <input type="text" id="buscaNome" class="form-control" placeholder="Buscar por nome" aria-label="Buscar favoritos por nome">
-        <select id="filtroArea" class="form-select" aria-label="Filtrar por área de atuação">
-          <option value="">Todas as áreas</option>
-          <option>Serviços de Vidros e Espelhos</option>
-          <option>Serviços de Marcenaria</option>
-          <option>Serviços de Elétrica</option>
-          <option>Serviços Hidráulicos</option>
-          <option>Serviços de Pintura</option>
-          <option>Jardinagem</option>
-          <option>Limpeza</option>
-        </select>
-        <select id="filtroStatus" class="form-select" aria-label="Filtrar por status">
-          <option value="">Todos os status</option>
-          <option value="online">Online agora</option>
-          <option value="top">Prestadores TOP</option>
-        </select>
-      </div>
-    </div>
-
-    <!-- Lista de Favoritos -->
-    <div id="listaFavoritos">
-      <!-- Os cards serão carregados dinamicamente pelo JavaScript -->
-    </div>
-
-    <!-- Mensagem quando não há favoritos -->
-    <div id="mensagemVazia" class="empty-message" style="display: none;">
-      <i class="bi bi-heart empty-icon"></i>
-      <h3>Sua lista de favoritos está vazia</h3>
-      <p class="text-muted">Adicione prestadores aos seus favoritos clicando no ícone de coração em seus perfis</p>
-      <a href="prestadores.html" class="btn btn-gold mt-3">
-        <i class="bi bi-people-fill me-2"></i>Encontrar prestadores
-      </a>
-    </div>
-  </div>
-
-  <!-- Modal de Confirmação -->
-  <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
-    <div class="modal-dialog modal-dialog-centered">
-      <div class="modal-content">
-        <div class="modal-header">
-          <h5 class="modal-title">Remover dos favoritos</h5>
-          <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+        <a href="#solicitacoesSubmenu" data-bs-toggle="collapse" aria-expanded="false" class="d-flex justify-content-between align-items-center dropdown-toggle">
+            <span><i class="bi bi-clipboard-check me-2"></i> Minha Atividade</span>
+        </a>
+        <div class="collapse submenu" id="solicitacoesSubmenu">
+            <a href="minhas_solicitacoes.html">↳ Solicitações</a>
+            <a href="reservas.html">↳ Reservas</a>
+            <a href="ocorrencias.html">↳ Ocorrências</a>
         </div>
-        <div class="modal-body">
-          <p>Tem certeza que deseja remover este prestador dos seus favoritos?</p>
+
+        <a href="minhas_avaliacoes.html"><i class="bi bi-star-fill me-2"></i> Minhas avaliações</a>
+        <a href="favoritos.html"><i class="bi bi-heart-fill me-2"></i> Meus favoritos</a>
+        <a href="ranking.html"><i class="bi bi-trophy me-2"></i> Ranking de prestadores</a>
+        
+        <a href="minha_conta.html"><i class="bi bi-person-circle me-2"></i> Minha conta</a>
+        <a href="index.html"><i class="bi bi-box-arrow-right me-2"></i> Sair</a>
+    </nav>
+
+    <div class="content">
+        <div class="d-flex justify-content-between align-items-center mb-1 pe-md-5 page-header">
+            <h1 class="fw-bold mb-0 text-gold"><i class="bi bi-heart-fill me-2"></i>Meus Favoritos</h1>
+            <div class="d-flex align-items-center">
+                <label for="ordenarPor" class="form-label me-2 mb-0 d-none d-sm-block">Ordenar por:</label>
+                <select class="form-select w-auto" id="ordenarPor">
+                    <option value="recentes">Mais recentes</option>
+                    <option value="nota">Melhor avaliação</option>
+                    <option value="nome">Ordem alfabética</option>
+                </select>
+            </div>
         </div>
-        <div class="modal-footer">
-          <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
-          <button type="button" class="btn btn-danger" id="confirmRemove">Remover</button>
+        <div class="gold-line"></div>
+        
+        <div class="card-custom mb-4">
+            <div class="row g-3">
+                <div class="col-lg-4">
+                    <input type="text" id="buscaNome" class="form-control" placeholder="Buscar por nome...">
+                </div>
+                <div class="col-lg-4">
+                    <select id="filtroArea" class="form-select">
+                        <option value="Todos">Todas as áreas</option>
+                        <option>Serviços de Elétrica</option>
+                        <option>Serviços Hidráulicos</option>
+                        <option>Serviços de Pintura</option>
+                        <option>Serviços de Marcenaria</option>
+                        <option>Serviços de Vidros e Espelhos</option>
+                        <option>Instalação de Ar-condicionado</option>
+                        <option>Manutenção Predial</option>
+                        <option>Instalação de Câmeras e Alarmes</option>
+                        <option>Jardinagem e Paisagismo</option>
+                        <option>Limpeza e Conservação</option>
+                        <option>Dedetização</option>
+                        <option>Treinador ou Personal Trainer</option>
+                        <option>Nutricionista</option>
+                        <option>Fisioterapeuta</option>
+                        <option>Esteticista / Massoterapeuta</option>
+                        <option>Cabelereiro(a) / Barber Shop</option>
+                        <option>Manicure / Pedicure</option>
+                        <option>Cuidadores de Idosos</option>
+                        <option>Cuidadores de Pets / Dog Walker</option>
+                        <option>Aulas Particulares / Reforço Escolar</option>
+                        <option>Tradução / Redação / Revisor</option>
+                        <option>TI / Suporte Técnico / Montagem de PC</option>
+                        <option>Marketing Digital / Design</option>
+                        <option>Assistência técnica celular / notebook</option>
+                        <option>Costureira / Ajustes de roupas</option>
+                        <option>Montagem de Móveis</option>
+                        <option>Chaveiro</option>
+                        <option>Outros</option>
+                    </select>
+                </div>
+                <div class="col-lg-4">
+                    <select id="filtroStatus" class="form-select">
+                        <option value="Todos">Todos os status</option>
+                        <option value="online">Online</option>
+                        <option value="top">Prestador TOP</option>
+                    </select>
+                </div>
+            </div>
         </div>
-      </div>
+
+        <div id="listaFavoritos" class="d-flex flex-column gap-3">
+            </div>
+
+        <div id="sem-favoritos" class="text-center p-5 card-custom" style="display: none;">
+            <i class="bi bi-emoji-wink" style="font-size: 3rem; color: var(--cor-ouro-principal);"></i>
+            <h4 class="mt-3 fw-bold">Ainda não há favoritos</h4>
+            <p class="text-muted">Adicione prestadores clicando no coração na página de Prestadores.</p>
+            <a href="prestadores.html" class="btn btn-gold mt-2">Encontrar Prestadores</a>
+        </div>
     </div>
-  </div>
 
-  <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
-  <script>
-    // Dados dos prestadores favoritos (simulando dados do localStorage)
-    const favoritosData = [
-      {
-        id: 1,
-        nome: "Maria Vidraçaria",
-        area: "Serviços de Vidros e Espelhos",
-        nota: 9.8,
-        avaliacoes: 24,
-        foto: "https://randomuser.me/api/portraits/women/44.jpg",
-        online: true,
-        top: true,
-        ultimoContato: "2025-06-15",
-        telefone: "(11) 98765-4321",
-        servicos: ["Instalação de espelhos", "Reparo de vidros", "Box para banheiro"]
-      },
-      {
-        id: 2,
-        nome: "João Marceneiro",
-        area: "Serviços de Marcenaria",
-        nota: 8.5,
-        avaliacoes: 18,
-        foto: "https://randomuser.me/api/portraits/men/32.jpg",
-        online: false,
-        top: false,
-        ultimoContato: "2025-05-28",
-        telefone: "(11) 91234-5678",
-        servicos: ["Móveis sob medida", "Reparos em madeira", "Instalação de armários"]
-      },
-      {
-        id: 3,
-        nome: "Carlos Eletricista",
-        area: "Serviços de Elétrica",
-        nota: 9.5,
-        avaliacoes: 32,
-        foto: "https://randomuser.me/api/portraits/men/65.jpg",
-        online: true,
-        top: true,
-        ultimoContato: "2025-06-10",
-        telefone: "(11) 99876-5432",
-        servicos: ["Instalações elétricas", "Manutenção predial", "Quadros de distribuição"]
-      },
-      {
-        id: 4,
-        nome: "Ana Hidráulica",
-        area: "Serviços Hidráulicos",
-        nota: 9.2,
-        avaliacoes: 15,
-        foto: "https://randomuser.me/api/portraits/women/68.jpg",
-        online: false,
-        top: false,
-        ultimoContato: "2025-05-15",
-        telefone: "(11) 94567-8901",
-        servicos: ["Reparos hidráulicos", "Desentupimentos", "Instalações sanitárias"]
-      }
-    ];
-
-    // Elementos do DOM
-    const listaFavoritos = document.getElementById('listaFavoritos');
-    const mensagemVazia = document.getElementById('mensagemVazia');
-    const ordenarPor = document.getElementById('ordenarPor');
-    const buscaNome = document.getElementById('buscaNome');
-    const filtroArea = document.getElementById('filtroArea');
-    const filtroStatus = document.getElementById('filtroStatus');
-    const confirmModal = new bootstrap.Modal('#confirmModal');
-    let prestadorParaRemover = null;
-
-    // Inicialização
-    document.addEventListener('DOMContentLoaded', () => {
-      // Verificar modo escuro
-      if (localStorage.getItem('modoEscuro') === 'true') {
-        document.body.classList.add('dark-mode');
-        document.querySelector('.dark-toggle-btn i').className = 'bi bi-sun-fill';
-      }
-      
-      // Carregar favoritos
-      carregarFavoritos();
-      
-      // Event listeners
-      ordenarPor.addEventListener('change', carregarFavoritos);
-      buscaNome.addEventListener('input', carregarFavoritos);
-      filtroArea.addEventListener('change', carregarFavoritos);
-      filtroStatus.addEventListener('change', carregarFavoritos);
-      
-      // Configurar botão de confirmação do modal
-      document.getElementById('confirmRemove').addEventListener('click', () => {
-        if (prestadorParaRemover) {
-          removerFavorito(prestadorParaRemover);
-          confirmModal.hide();
-        }
-      });
-    });
-
-    // Função para carregar os favoritos
-    function carregarFavoritos() {
-      // Simular loading
-      listaFavoritos.innerHTML = `
-        <div class="text-center py-4">
-          <div class="spinner-border text-warning" role="status">
-            <span class="visually-hidden">Carregando...</span>
-          </div>
-        </div>`;
-      
-      // Simular requisição assíncrona
-      setTimeout(() => {
-        const termoBusca = buscaNome.value.toLowerCase();
-        const areaSelecionada = filtroArea.value;
-        const statusSelecionado = filtroStatus.value;
-        
-        // Filtrar favoritos
-        let favoritosFiltrados = favoritosData.filter(prestador => {
-          const matchNome = prestador.nome.toLowerCase().includes(termoBusca);
-          const matchArea = !areaSelecionada || prestador.area === areaSelecionada;
-          const matchStatus = 
-            !statusSelecionado || 
-            (statusSelecionado === 'online' && prestador.online) || 
-            (statusSelecionado === 'top' && prestador.top);
-          
-          return matchNome && matchArea && matchStatus;
-        });
-        
-        // Ordenar favoritos
-        const ordem = ordenarPor.value;
-        if (ordem === 'nota') {
-          favoritosFiltrados.sort((a, b) => b.nota - a.nota);
-        } else if (ordem === 'nome') {
-          favoritosFiltrados.sort((a, b) => a.nome.localeCompare(b.nome));
-        } else {
-          favoritosFiltrados.sort((a, b) => new Date(b.ultimoContato) - new Date(a.ultimoContato));
-        }
-        
-        // Exibir favoritos ou mensagem de lista vazia
-        if (favoritosFiltrados.length > 0) {
-          exibirFavoritos(favoritosFiltrados);
-          mensagemVazia.style.display = 'none';
-        } else {
-          listaFavoritos.innerHTML = '';
-          mensagemVazia.style.display = 'block';
-        }
-      }, 500);
-    }
-
-    // Função para exibir os favoritos
-    function exibirFavoritos(favoritos) {
-      listaFavoritos.innerHTML = '';
-      
-      favoritos.forEach(prestador => {
-        const card = document.createElement('div');
-        card.className = 'card-favorito';
-        card.innerHTML = `
-          <div class="favorito-actions">
-            <button class="btn-contato" title="Entrar em contato" onclick="contatarPrestador(${prestador.id})">
-              <i class="bi bi-whatsapp"></i>
-            </button>
-            <button class="btn-favorito" title="Remover dos favoritos" onclick="solicitarRemocao(${prestador.id})">
-              <i class="bi bi-heart-fill"></i>
-            </button>
-          </div>
-          
-          <div class="prestador-info">
-            <img src="${prestador.foto}" alt="${prestador.nome}" class="prestador-img">
-            <div class="prestador-details">
-              <h3 class="prestador-name">${prestador.nome}</h3>
-              <p class="prestador-category">
-                <i class="bi ${getAreaIcon(prestador.area)}"></i> ${prestador.area}
-              </p>
-              <div class="prestador-rating">
-                <span class="rating-stars">${getStarRating(prestador.nota)}</span>
-                <span class="rating-value">${prestador.nota.toFixed(1)}</span>
-                <span class="text-muted ms-2">(${prestador.avaliacoes} avaliações)</span>
-              </div>
+    <div class="modal fade" id="modalConfirmarRemocao" tabindex="-1">
+         <div class="modal-dialog modal-dialog-centered">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Confirmar Remoção</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal"></button>
+                </div>
+                <div class="modal-body">
+                    <p>Tem a certeza de que deseja remover <strong id="nome-prestador-remover"></strong> dos seus favoritos?</p>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Cancelar</button>
+                    <button type="button" class="btn btn-danger" id="btn-confirmar-remocao">Remover</button>
+                </div>
             </div>
-          </div>
-          
-          <div class="prestador-meta">
-            <div class="meta-item">
-              <i class="bi bi-telephone"></i>
-              <span>${prestador.telefone}</span>
-            </div>
-            <div class="meta-item">
-              <i class="bi bi-calendar"></i>
-              <span>Último contato: ${formatarData(prestador.ultimoContato)}</span>
-            </div>
-            <div class="meta-item">
-              <span class="badge-status ${prestador.online ? 'badge-online' : 'badge-offline'}">
-                ${prestador.online ? 'Online agora' : 'Offline'}
-              </span>
-              ${prestador.top ? '<span class="badge-status badge-top ms-2">TOP</span>' : ''}
-            </div>
-          </div>
-          
-          <div class="mt-3">
-            <h6><i class="bi bi-tools"></i> Serviços oferecidos:</h6>
-            <div class="d-flex flex-wrap gap-2 mt-2">
-              ${prestador.servicos.map(servico => `
-                <span class="badge bg-secondary">${servico}</span>
-              `).join('')}
-            </div>
-          </div>
-        `;
-        
-        listaFavoritos.appendChild(card);
-      });
-    }
+        </div>
+    </div>
 
-    // Função para solicitar remoção de favorito
-    function solicitarRemocao(id) {
-      prestadorParaRemover = id;
-      confirmModal.show();
-    }
-
-    // Função para remover favorito
-    function removerFavorito(id) {
-      // Aqui você faria a remoção do localStorage ou API
-      // Estamos simulando removendo do array temporário
-      const index = favoritosData.findIndex(p => p.id === id);
-      if (index !== -1) {
-        favoritosData.splice(index, 1);
-        carregarFavoritos();
-      }
-    }
-
-    // Função para contatar prestador
-    function contatarPrestador(id) {
-      const prestador = favoritosData.find(p => p.id === id);
-      if (prestador) {
-        // Simular abertura do WhatsApp
-        alert(`Abrindo WhatsApp para contato com ${prestador.nome} (${prestador.telefone})`);
-        // window.open(`https://wa.me/55${prestador.telefone.replace(/\D/g, '')}`, '_blank');
-      }
-    }
-
-    // Função para alternar o modo escuro
-    function toggleDarkMode() {
-      document.body.classList.toggle('dark-mode');
-      const isDark = document.body.classList.contains('dark-mode');
-      localStorage.setItem('modoEscuro', isDark);
-      
-      // Atualizar ícone
-      const icon = document.querySelector('.dark-toggle-btn i');
-      icon.className = isDark ? 'bi bi-sun-fill' : 'bi bi-moon-stars-fill';
-    }
-
-    // Funções auxiliares
-    function getAreaIcon(area) {
-      const icons = {
-        "Vidros": "bi-window",
-        "Marcenaria": "bi-hammer",
-        "Elétrica": "bi-lightning",
-        "Hidráulicos": "bi-droplet",
-        "Pintura": "bi-brush",
-        "Jardinagem": "bi-flower1",
-        "Limpeza": "bi-bucket"
-      };
-      
-      for (const [key, value] of Object.entries(icons)) {
-        if (area.includes(key)) return value;
-      }
-      return "bi-tools";
-    }
-
-    function getStarRating(nota) {
-      const fullStars = Math.floor(nota);
-      const halfStar = nota % 1 >= 0.5 ? 1 : 0;
-      const emptyStars = 5 - fullStars - halfStar;
-      
-      return `${'<i class="bi bi-star-fill"></i>'.repeat(fullStars)}${halfStar ? '<i class="bi bi-star-half"></i>' : ''}${'<i class="bi bi-star"></i>'.repeat(emptyStars)}`;
-    }
-
-    function formatarData(dataString) {
-      const [ano, mes, dia] = dataString.split('-');
-      return `${dia}/${mes}/${ano}`;
-    }
-  </script>
+    <script src="js/main.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
